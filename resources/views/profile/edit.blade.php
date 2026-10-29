@@ -113,59 +113,6 @@
                     <button type="submit" class="nb-btn nb-btn-primary">Simpan Perubahan</button>
                 </form>
             </section>
-
-            <section class="nb-card p-6 md:p-8">
-                <h3 class="text-3xl font-black leading-none">Ganti Password</h3>
-
-                @if(session('status') === 'password-updated')
-                    <p class="nb-flash nb-flash-success mt-4">Password berhasil diubah.</p>
-                @endif
-
-                <form method="POST" action="{{ route('password.update') }}" class="mt-5 space-y-4">
-                    @csrf
-                    @method('put')
-
-                    <div>
-                        <label class="nb-label">Password Saat Ini</label>
-                        <input type="password" name="current_password" class="nb-input" required>
-                        @error('current_password', 'updatePassword')<p class="nb-error">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label class="nb-label">Password Baru</label>
-                        <input type="password" name="password" class="nb-input" required>
-                        @error('password', 'updatePassword')<p class="nb-error">{{ $message }}</p>@enderror
-                    </div>
-
-                    <div>
-                        <label class="nb-label">Konfirmasi Password Baru</label>
-                        <input type="password" name="password_confirmation" class="nb-input" required>
-                        @error('password_confirmation', 'updatePassword')<p class="nb-error">{{ $message }}</p>@enderror
-                    </div>
-
-                    <button type="submit" class="nb-btn nb-btn-secondary">Update Password</button>
-                </form>
-            </section>
-
-            <section class="nb-card p-6 md:p-8">
-                <h3 class="text-3xl font-black leading-none">Zona Bahaya</h3>
-                <p class="mt-2 text-lg font-medium">Hapus akun akan menghapus data login Anda secara permanen.</p>
-
-                <form method="POST" action="{{ route('profile.destroy') }}" class="mt-5 space-y-4">
-                    @csrf
-                    @method('delete')
-
-                    <div>
-                        <label class="nb-label">Konfirmasi Password</label>
-                        <input type="password" name="password" class="nb-input" required>
-                        @error('password', 'userDeletion')<p class="nb-error">{{ $message }}</p>@enderror
-                    </div>
-
-                    <button type="submit" class="nb-btn nb-btn-danger" onclick="return confirm('Yakin ingin menghapus akun ini?')">
-                        Hapus Akun
-                    </button>
-                </form>
-            </section>
         </div>
     </div>
 </x-app-layout>

@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\KosanApiController;
 use App\Http\Controllers\Api\PemesananApiController;
 use App\Http\Controllers\Api\UlasanApiController;
 use App\Http\Controllers\Api\FasilitasApiController;
-use App\Http\Controllers\Api\UsersApiController;
 
 // =====================
 // PUBLIC ROUTES
@@ -34,5 +33,4 @@ Route::middleware('auth:api')->name('api.')->group(function () {
     Route::apiResource('pemesanan', PemesananApiController::class);
     Route::apiResource('ulasan', UlasanApiController::class)->only(['store', 'update', 'destroy']);
     Route::apiResource('fasilitas', FasilitasApiController::class)->only(['store', 'update', 'destroy']);
-    Route::apiResource('users', UsersApiController::class);
 });
