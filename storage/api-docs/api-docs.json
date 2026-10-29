@@ -1,0 +1,1400 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "EasyKos API Documentation",
+        "description": "Dokumentasi API untuk aplikasi EasyKos - Manajemen Kos-kosan",
+        "contact": {
+            "email": "admin@easykos.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "EasyKos API Server Local"
+        }
+    ],
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login user dan dapatkan JWT token",
+                "operationId": "222b2625838e3c57e017987f73598fda",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Login berhasil"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register user baru",
+                "operationId": "8e4e3cb7b46126f4696379d3c7eeb4ad",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nama",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "nama": {
+                                        "type": "string",
+                                        "example": "Budi Santoso"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "budi@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "no_telepon": {
+                                        "type": "string",
+                                        "example": "08123456789"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "user",
+                                        "enum": [
+                                            "user",
+                                            "pemilik"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registrasi berhasil"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Dapatkan data user yang sedang login",
+                "operationId": "8367feff40ba10e43187792cad3132c1",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil data"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/fasilitas": {
+            "get": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Daftar fasilitas (publik)",
+                "operationId": "084f71687158c577694e37c6beeda0aa",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Jumlah data per halaman",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar fasilitas"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Tambah fasilitas baru (hanya admin)",
+                "operationId": "bc996904e7b316b57c6f7adffb7aca31",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nama_fasilitas"
+                                ],
+                                "properties": {
+                                    "nama_fasilitas": {
+                                        "type": "string",
+                                        "example": "Kolam Renang"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Fasilitas berhasil ditambahkan"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/fasilitas/{id}": {
+            "get": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Detail fasilitas (publik)",
+                "operationId": "8ab20c7f4fb37cbb6419c322e446fc0a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Fasilitas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil detail fasilitas"
+                    },
+                    "404": {
+                        "description": "Fasilitas tidak ditemukan"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Hapus fasilitas (hanya admin)",
+                "operationId": "55ac60e8b0de24f0ea2c8c18ba19d53d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Fasilitas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas berhasil dihapus"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Fasilitas tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Fasilitas"
+                ],
+                "summary": "Update fasilitas (hanya admin)",
+                "operationId": "c6d7c9858698010f1bf3e6bee14bfb7d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Fasilitas",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nama_fasilitas"
+                                ],
+                                "properties": {
+                                    "nama_fasilitas": {
+                                        "type": "string",
+                                        "example": "WiFi 100Mbps"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fasilitas berhasil diperbarui"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Fasilitas tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/kosan": {
+            "get": {
+                "tags": [
+                    "Kosan"
+                ],
+                "summary": "Daftar semua kosan aktif (publik)",
+                "operationId": "d65efba4e7dbacef4f53a1e27bf9788b",
+                "parameters": [
+                    {
+                        "name": "mine",
+                        "in": "query",
+                        "description": "Filter kosan milik saya (perlu login pemilik)",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "kota",
+                        "in": "query",
+                        "description": "Filter berdasarkan kota",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "tipe",
+                        "in": "query",
+                        "description": "Filter tipe (putra/putri/campur)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "putra",
+                                "putri",
+                                "campur"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "min_harga",
+                        "in": "query",
+                        "description": "Harga minimum",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "max_harga",
+                        "in": "query",
+                        "description": "Harga maksimum",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "name": "tersedia",
+                        "in": "query",
+                        "description": "Hanya yang tersedia (1/0)",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Jumlah data per halaman",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar kosan"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Kosan"
+                ],
+                "summary": "Tambah kosan baru (hanya pemilik)",
+                "operationId": "faff4122e6ffae86040f45b093b74801",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nama_kosan",
+                                    "deskripsi",
+                                    "alamat",
+                                    "kota",
+                                    "harga_per_bulan",
+                                    "jumlah_kamar",
+                                    "kamar_tersedia",
+                                    "tipe"
+                                ],
+                                "properties": {
+                                    "nama_kosan": {
+                                        "type": "string",
+                                        "example": "Kos Melati"
+                                    },
+                                    "deskripsi": {
+                                        "type": "string",
+                                        "example": "Kos nyaman tengah kota"
+                                    },
+                                    "alamat": {
+                                        "type": "string",
+                                        "example": "Jl. Merdeka No. 10"
+                                    },
+                                    "kota": {
+                                        "type": "string",
+                                        "example": "Malang"
+                                    },
+                                    "harga_per_bulan": {
+                                        "type": "number",
+                                        "example": 1000000
+                                    },
+                                    "jumlah_kamar": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "kamar_tersedia": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "tipe": {
+                                        "type": "string",
+                                        "example": "campur",
+                                        "enum": [
+                                            "putra",
+                                            "putri",
+                                            "campur"
+                                        ]
+                                    },
+                                    "fasilitas": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "example": [
+                                            "WiFi",
+                                            "AC"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Kosan berhasil ditambahkan"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/kosan/{id}": {
+            "get": {
+                "tags": [
+                    "Kosan"
+                ],
+                "summary": "Detail satu kosan (publik)",
+                "operationId": "caa7d012220263c6d2c153f151087255",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Kosan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil detail kosan"
+                    },
+                    "404": {
+                        "description": "Kosan tidak ditemukan"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Kosan"
+                ],
+                "summary": "Hapus kosan (hanya pemilik kosan tersebut)",
+                "operationId": "54eab7892c8f50116c6497a174972517",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Kosan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Kosan berhasil dihapus"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Kosan tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Kosan"
+                ],
+                "summary": "Update kosan (hanya pemilik kosan tersebut)",
+                "operationId": "af640d4417ff0eeb1ca180d979d9963d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Kosan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nama_kosan": {
+                                        "type": "string"
+                                    },
+                                    "deskripsi": {
+                                        "type": "string"
+                                    },
+                                    "alamat": {
+                                        "type": "string"
+                                    },
+                                    "kota": {
+                                        "type": "string"
+                                    },
+                                    "harga_per_bulan": {
+                                        "type": "number"
+                                    },
+                                    "jumlah_kamar": {
+                                        "type": "integer"
+                                    },
+                                    "kamar_tersedia": {
+                                        "type": "integer"
+                                    },
+                                    "tipe": {
+                                        "type": "string",
+                                        "enum": [
+                                            "putra",
+                                            "putri",
+                                            "campur"
+                                        ]
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "aktif",
+                                            "nonaktif"
+                                        ]
+                                    },
+                                    "fasilitas": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Kosan berhasil diperbarui"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Kosan tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pemesanan": {
+            "get": {
+                "tags": [
+                    "Pemesanan"
+                ],
+                "summary": "Daftar pemesanan milik user yang login",
+                "operationId": "6b77cf85c3bbd7ef77863d0565dd7d9a",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar pemesanan"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Pemesanan"
+                ],
+                "summary": "Buat pemesanan baru",
+                "operationId": "e603a0cb60669e4a33f3389a873d9a2d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "kosan_id",
+                                    "tanggal_masuk",
+                                    "durasi_bulan"
+                                ],
+                                "properties": {
+                                    "kosan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "tanggal_masuk": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-06-01"
+                                    },
+                                    "durasi_bulan": {
+                                        "type": "integer",
+                                        "example": 3,
+                                        "maximum": 24,
+                                        "minimum": 1
+                                    },
+                                    "catatan": {
+                                        "type": "string",
+                                        "example": "Mohon segera diproses."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pemesanan berhasil dibuat"
+                    },
+                    "400": {
+                        "description": "Kamar penuh atau sudah ada pemesanan aktif"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pemesanan/{id}": {
+            "get": {
+                "tags": [
+                    "Pemesanan"
+                ],
+                "summary": "Detail satu pemesanan",
+                "operationId": "dadeddc1d36b5beae638cd73e48a669b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Pemesanan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil detail pemesanan"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Pemesanan tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Pemesanan"
+                ],
+                "summary": "Hapus pemesanan (hanya jika pending dan milik sendiri)",
+                "operationId": "45170e1650d989b852447a6ee888921c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Pemesanan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Pemesanan berhasil dihapus"
+                    },
+                    "400": {
+                        "description": "Hanya pending yang bisa dihapus"
+                    },
+                    "404": {
+                        "description": "Pemesanan tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Pemesanan"
+                ],
+                "summary": "Update status pemesanan",
+                "description": "Pemilik bisa setuju/tolak, User bisa batalkan",
+                "operationId": "921cd4ff6d0add81279bb4a14d2ec961",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Pemesanan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "disetujui",
+                                            "ditolak",
+                                            "dibatalkan"
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status berhasil diperbarui"
+                    },
+                    "400": {
+                        "description": "Status tidak dapat diproses"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ulasan": {
+            "get": {
+                "tags": [
+                    "Ulasan"
+                ],
+                "summary": "Daftar ulasan (publik)",
+                "operationId": "8f24bcc776fb5d763b35f77b3da136a6",
+                "parameters": [
+                    {
+                        "name": "kosan_id",
+                        "in": "query",
+                        "description": "Filter ulasan berdasarkan ID Kosan",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Jumlah data per halaman",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar ulasan"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Ulasan"
+                ],
+                "summary": "Tambah ulasan untuk kosan (harus pernah menyewa)",
+                "operationId": "bce09c0f56cb8dc3bd97752c0ebedf56",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "kosan_id",
+                                    "rating"
+                                ],
+                                "properties": {
+                                    "kosan_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "rating": {
+                                        "type": "integer",
+                                        "example": 5,
+                                        "maximum": 5,
+                                        "minimum": 1
+                                    },
+                                    "komentar": {
+                                        "type": "string",
+                                        "example": "Tempatnya bersih dan nyaman."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ulasan berhasil ditambahkan"
+                    },
+                    "403": {
+                        "description": "Hanya penyewa yang bisa mengulas"
+                    },
+                    "409": {
+                        "description": "Sudah pernah mengulas"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/ulasan/{id}": {
+            "get": {
+                "tags": [
+                    "Ulasan"
+                ],
+                "summary": "Detail ulasan (publik)",
+                "operationId": "5a447212ba78938e38500aa615a6de2f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Ulasan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil detail ulasan"
+                    },
+                    "404": {
+                        "description": "Ulasan tidak ditemukan"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Ulasan"
+                ],
+                "summary": "Hapus ulasan milik sendiri atau admin",
+                "operationId": "9b3ee29a919329c9b2a0d9ae0c73326f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Ulasan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ulasan berhasil dihapus"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Ulasan tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Ulasan"
+                ],
+                "summary": "Update ulasan milik sendiri",
+                "operationId": "7f0183052947600a2c996f1cc06b88e3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID Ulasan",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "rating": {
+                                        "type": "integer",
+                                        "maximum": 5,
+                                        "minimum": 1
+                                    },
+                                    "komentar": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ulasan berhasil diperbarui"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Ulasan tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Daftar semua user (hanya admin)",
+                "operationId": "1a225a5d5bf88729b3d0acc4d3de0538",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Pencarian nama/email",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "Filter berdasarkan role",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "admin",
+                                "pemilik",
+                                "user"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Jumlah data per halaman",
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar user"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Tambah user baru (hanya admin)",
+                "operationId": "9ddc486c6cd3f5d83d62231716bf6c91",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nama",
+                                    "email",
+                                    "password",
+                                    "password_confirmation",
+                                    "role"
+                                ],
+                                "properties": {
+                                    "nama": {
+                                        "type": "string",
+                                        "example": "Admin Baru"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin2@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "user",
+                                        "enum": [
+                                            "admin",
+                                            "pemilik",
+                                            "user"
+                                        ]
+                                    },
+                                    "no_telepon": {
+                                        "type": "string",
+                                        "example": "08123456789"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User berhasil ditambahkan"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "409": {
+                        "description": "Admin sudah ada"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Detail satu user (hanya admin)",
+                "operationId": "d8c9be92ec1e4da4c1fb2b14d05d17cd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil detail user"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "User tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Hapus user (hanya admin)",
+                "operationId": "eed9832f984af793b898f4c6f2994247",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User berhasil dihapus"
+                    },
+                    "400": {
+                        "description": "Tidak dapat menghapus diri sendiri"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "User tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update user (hanya admin)",
+                "operationId": "2002ea44f4c7a91cba138ef46924aa09",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID User",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nama": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "enum": [
+                                            "admin",
+                                            "pemilik",
+                                            "user"
+                                        ]
+                                    },
+                                    "no_telepon": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User berhasil diperbarui"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "User tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Masukkan token JWT Anda di sini. Cukup masukkan tokennya saja (tanpa kata 'Bearer ')",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "Fasilitas",
+            "description": "Fasilitas"
+        },
+        {
+            "name": "Kosan",
+            "description": "Kosan"
+        },
+        {
+            "name": "Pemesanan",
+            "description": "Pemesanan"
+        },
+        {
+            "name": "Ulasan",
+            "description": "Ulasan"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
+        }
+    ]
+}
