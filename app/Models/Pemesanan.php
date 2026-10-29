@@ -15,6 +15,7 @@ class Pemesanan extends Model
         'total_harga',
         'status',
         'catatan',
+        'bukti_pembayaran',
     ];
 
     protected $casts = [
@@ -22,6 +23,23 @@ class Pemesanan extends Model
         'durasi_bulan' => 'integer',
         'total_harga' => 'integer',
     ];
+
+    protected $appends = [
+        'bukti_pembayaran_url',
+    ];
+
+    public function getBuktiPembayaranUrlAttribute(): ?string
+    {
+        if (empty($this->bukti_pembayaran)) {
+            return null;
+        }
+
+        if (str_starts_with($this->bukti_pembayaran, 'http://') || str_starts_with($this->bukti_pembayaran, 'https://')) {
+            return $this->bukti_pembayaran;
+        }
+
+        return asset('storage/' . $this->bukti_pembayaran);
+    }
 
     public function user(): BelongsTo
     {

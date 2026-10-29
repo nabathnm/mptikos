@@ -62,9 +62,20 @@
                                                 {{ $pemesanan->kosan->alamat ?? '' }}{{ ($pemesanan->kosan && $pemesanan->kosan->alamat) ? ',' : '' }} {{ $pemesanan->kosan->kota ?? '' }}
                                             </p>
                                         </div>
-                                        <span class="nb-kicker border-2 border-black px-2 py-1 {{ $status }}">
-                                            {{ ucfirst($pemesanan->status) }}
-                                        </span>
+                                        <div class="flex flex-wrap gap-2">
+                                            @if($pemesanan->bukti_pembayaran)
+                                                <span class="nb-kicker border-2 border-black bg-emerald-200 px-2 py-1">
+                                                    ✓ Bukti Terunggah
+                                                </span>
+                                            @elseif($pemesanan->status === 'pending')
+                                                <span class="nb-kicker border-2 border-black bg-amber-200 px-2 py-1">
+                                                    ⚠️ Belum Upload Bukti
+                                                </span>
+                                            @endif
+                                            <span class="nb-kicker border-2 border-black px-2 py-1 {{ $status }}">
+                                                {{ ucfirst($pemesanan->status) }}
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <div class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-lg font-medium">

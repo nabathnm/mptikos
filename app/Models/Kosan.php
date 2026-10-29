@@ -24,6 +24,9 @@ class Kosan extends Model
         'tipe',
         'fasilitas',
         'status',
+        'nama_bank',
+        'nomor_rekening',
+        'nama_rekening',
     ];
 
     protected $casts = [

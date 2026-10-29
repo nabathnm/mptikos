@@ -60,6 +60,9 @@ class KosanController extends Controller
             'kamar_tersedia' => 'required|integer',
             'tipe' => 'required|in:putra,putri,campur',
             'fasilitas' => 'nullable|array',
+            'nama_bank' => 'nullable|string|max:100',
+            'nomor_rekening' => 'nullable|string|max:50',
+            'nama_rekening' => 'nullable|string|max:150',
             'fotos.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
         ]);
 
@@ -74,6 +77,9 @@ class KosanController extends Controller
             'kamar_tersedia' => $request->kamar_tersedia,
             'tipe' => $request->tipe,
             'fasilitas' => $request->fasilitas ?? [],
+            'nama_bank' => $request->nama_bank,
+            'nomor_rekening' => $request->nomor_rekening,
+            'nama_rekening' => $request->nama_rekening,
             'status' => 'aktif'
         ]);
 
@@ -129,6 +135,9 @@ class KosanController extends Controller
             'kamar_tersedia' => 'required|integer',
             'tipe' => 'required|in:putra,putri,campur',
             'fasilitas' => 'nullable|array',
+            'nama_bank' => 'nullable|string|max:100',
+            'nomor_rekening' => 'nullable|string|max:50',
+            'nama_rekening' => 'nullable|string|max:150',
             'fotos.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240',
             'hapus_fotos' => 'nullable|array',
             'hapus_fotos.*' => 'exists:foto_kosans,id',
@@ -145,6 +154,9 @@ class KosanController extends Controller
             'kamar_tersedia' => $request->kamar_tersedia,
             'tipe' => $request->tipe,
             'fasilitas' => $request->fasilitas ?? [],
+            'nama_bank' => $request->nama_bank,
+            'nomor_rekening' => $request->nomor_rekening,
+            'nama_rekening' => $request->nama_rekening,
         ]);
 
         // 1. Delete selected photos

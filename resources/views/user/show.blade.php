@@ -221,6 +221,15 @@
                             <p class="nb-kicker mt-1">{{ $kosan->pemilik->no_telepon }}</p>
                         @endif
                     </section>
+
+                    @if($kosan->nama_bank)
+                        <section class="nb-card p-5 md:p-6">
+                            <h3 class="text-2xl font-black leading-none">Rekening Pembayaran</h3>
+                            <p class="mt-2 text-lg font-bold">{{ $kosan->nama_bank }}</p>
+                            <p class="text-xl font-black">{{ $kosan->nomor_rekening }}</p>
+                            <p class="nb-kicker mt-1">a.n. {{ $kosan->nama_rekening }}</p>
+                        </section>
+                    @endif
                 </aside>
             </div>
         </div>

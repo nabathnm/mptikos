@@ -54,9 +54,16 @@
                                                 {{ $pemesanan->user->email ?? '-' }}
                                             </p>
                                         </div>
-                                        <span class="nb-kicker border-2 border-black px-2 py-1 {{ $sc['tone'] }}">
-                                            {{ $sc['label'] }}
-                                        </span>
+                                        <div class="flex flex-wrap gap-2">
+                                            @if($pemesanan->bukti_pembayaran)
+                                                <span class="nb-kicker border-2 border-black bg-emerald-200 px-2 py-1">
+                                                    ✓ Bukti Ada
+                                                </span>
+                                            @endif
+                                            <span class="nb-kicker border-2 border-black px-2 py-1 {{ $sc['tone'] }}">
+                                                {{ $sc['label'] }}
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <div class="mt-4 grid gap-2 text-lg font-medium md:grid-cols-2">

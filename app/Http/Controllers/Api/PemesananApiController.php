@@ -257,12 +257,38 @@ class PemesananApiController extends Controller
             }
         }
 
-        $pemesanan->update(['status' => $statusBaru]);
-
-        // Kurangi kamar tersedia jika disetujui
         if ($statusBaru === 'disetujui') {
-            $pemesanan->kosan->decrement('kamar_tersedia');
+            return \Illuminate\Support\Facades\DB::transaction(function () use ($pemesanan, $statusBaru) {
+                $kosan = Kosan::where('id', $pemesanan->kosan_id)->lockForUpdate()->first();
+                if ($kosan->kamar_tersedia <= 0) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Tidak dapat menyetujui, kamar kosan ini sudah habis',
+                    ], 400);
+                }
+
+                $pemesanan->update(['status' => $statusBaru]);
+                $kosan->decrement('kamar_tersedia');
+
+                if ($kosan->kamar_tersedia <= 0) {
+                    Pemesanan::where('kosan_id', $kosan->id)
+                        ->where('status', 'pending')
+                        ->where('id', '!=', $pemesanan->id)
+                        ->update([
+                            'status' => 'ditolak',
+                            'catatan' => 'Ditolak otomatis karena kamar telah terisi penuh oleh pemesan lain yang disetujui lebih dahulu.'
+                        ]);
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status pemesanan berhasil diperbarui menjadi disetujui' . ($kosan->kamar_tersedia <= 0 ? ' (kamar penuh, sisa pesanan pending lainnya otomatis ditolak)' : ''),
+                    'data'    => $pemesanan->fresh('kosan'),
+                ]);
+            });
         }
+
+        $pemesanan->update(['status' => $statusBaru]);
 
         return response()->json([
             'success' => true,

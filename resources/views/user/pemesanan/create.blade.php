@@ -13,7 +13,7 @@
                 <div class="nb-flash nb-flash-error">{{ session('error') }}</div>
             @endif
 
-            <form method="POST" action="{{ route('user.pemesanan.store') }}" x-data="{
+            <form method="POST" action="{{ route('user.pemesanan.store') }}" enctype="multipart/form-data" x-data="{
                 harga: {{ $kosan->harga_per_bulan }},
                 durasi: {{ old('durasi_bulan', 1) }},
                 get totalHarga() { return this.harga * this.durasi; }
@@ -59,9 +59,42 @@
 
                         <div>
                             <label class="nb-label">Catatan</label>
-                            <textarea name="catatan" rows="4" class="nb-textarea" placeholder="Waktu kedatangan, pertanyaan khusus, dll.">{{ old('catatan') }}</textarea>
+                            <textarea name="catatan" rows="3" class="nb-textarea" placeholder="Waktu kedatangan, pertanyaan khusus, dll.">{{ old('catatan') }}</textarea>
                             @error('catatan')<p class="nb-error">{{ $message }}</p>@enderror
                         </div>
+                    </div>
+                </section>
+
+                <section class="nb-card p-5 md:p-6">
+                    <h3 class="text-3xl font-black leading-none">Informasi Pembayaran</h3>
+                    <p class="nb-kicker mt-1">Silakan transfer sesuai total biaya sewa ke rekening pemilik kos berikut:</p>
+
+                    <div class="nb-card-soft mt-4 p-4">
+                        <div class="grid gap-3 sm:grid-cols-3">
+                            <div>
+                                <span class="nb-kicker">Bank / E-Wallet</span>
+                                <p class="text-xl font-black">{{ $kosan->nama_bank ?? 'Hubungi Pemilik' }}</p>
+                            </div>
+                            <div>
+                                <span class="nb-kicker">Nomor Rekening</span>
+                                <p class="text-xl font-black">{{ $kosan->nomor_rekening ?? ($kosan->pemilik->no_telepon ?? '-') }}</p>
+                            </div>
+                            <div>
+                                <span class="nb-kicker">Atas Nama</span>
+                                <p class="text-xl font-black">{{ $kosan->nama_rekening ?? ($kosan->pemilik->nama ?? '-') }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5">
+                        <label class="nb-label">Unggah Bukti Transfer (Opsional)</label>
+                        <p class="nb-kicker mb-2">Bisa diunggah sekarang atau nanti setelah pesanan dibuat (Format: JPG, PNG, maks 10MB).</p>
+                        <input type="file" name="bukti_pembayaran" accept="image/*" class="nb-input bg-white">
+                        @error('bukti_pembayaran')<p class="nb-error">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="mt-4 border-2 border-black bg-yellow-100 p-3 text-sm font-bold">
+                        ⚡ <strong>Aturan Alokasi Kamar (First-Approved):</strong> Kamar akan diberikan kepada penyewa yang bukti transfernya disetujui lebih dahulu oleh pemilik. Jika kuota kamar habis, pesanan lain otomatis dibatalkan.
                     </div>
                 </section>
 
@@ -77,7 +110,7 @@
                             <span x-text="durasi + ' bulan'"></span>
                         </div>
                         <div class="flex items-center justify-between text-2xl font-black">
-                            <span>Total</span>
+                            <span>Total yang Harus Ditransfer</span>
                             <span x-text="'Rp ' + totalHarga.toLocaleString('id-ID')"></span>
                         </div>
                     </div>

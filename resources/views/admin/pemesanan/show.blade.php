@@ -99,6 +99,40 @@
             </section>
 
             <section class="nb-card p-5 md:p-6">
+                <h3 class="text-3xl font-black leading-none">Bukti Pembayaran Transfer</h3>
+                <p class="nb-kicker mt-1">Periksa bukti transfer sebelum menyetujui pesanan ini.</p>
+
+                <div class="mt-4">
+                    @if($pemesanan->bukti_pembayaran_url)
+                        <div class="nb-card-soft p-4">
+                            <div class="flex flex-col sm:flex-row gap-4 items-start justify-between">
+                                <div class="space-y-3">
+                                    <div class="max-w-sm border-2 border-black overflow-hidden bg-gray-200">
+                                        <img src="{{ $pemesanan->bukti_pembayaran_url }}" alt="Bukti Transfer" class="w-full h-auto max-h-80 object-contain">
+                                    </div>
+                                    <p class="nb-kicker">Foto bukti struk / mutasi dari penyewa</p>
+                                </div>
+                                <a href="{{ $pemesanan->bukti_pembayaran_url }}" target="_blank" class="nb-btn nb-btn-secondary py-2 px-4 text-sm whitespace-nowrap">
+                                    Buka Foto Penuh ↗
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="nb-card-soft border-2 border-dashed border-yellow-500 bg-yellow-50 p-4">
+                            <p class="text-lg font-bold text-yellow-800">⚠️ Penyewa Belum Mengunggah Bukti Transfer</p>
+                            <p class="text-sm font-medium text-gray-700 mt-1">Penyewa belum mengirimkan foto bukti pembayaran.</p>
+                        </div>
+                    @endif
+                </div>
+
+                @if($pemesanan->status === 'pending')
+                    <div class="mt-4 border-2 border-black bg-blue-50 p-3 text-sm font-bold">
+                        ⚡ <strong>First-Approved Rule:</strong> Jika Anda menyetujui pesanan ini dan sisa kamar kosan menjadi 0 (habis), sistem akan otomatis menolak semua pemesanan lain yang masih berstatus pending untuk kosan ini.
+                    </div>
+                @endif
+            </section>
+
+            <section class="nb-card p-5 md:p-6">
                 <h3 class="text-3xl font-black leading-none">Rincian Pemesanan</h3>
                 <div class="mt-5 space-y-3 text-lg font-medium">
                     <div class="flex items-center justify-between border-b-2 border-black pb-2">

@@ -13,6 +13,9 @@
             @if(session('success'))
                 <div class="nb-flash nb-flash-success">{{ session('success') }}</div>
             @endif
+            @if(session('error'))
+                <div class="nb-flash nb-flash-error">{{ session('error') }}</div>
+            @endif
 
             @php
                 $statusConfig = [
@@ -30,9 +33,9 @@
                         <p class="text-4xl font-black leading-none">{{ $sc['label'] }}</p>
                         <p class="nb-kicker mt-1">
                             @if($pemesanan->status === 'pending')
-                                Menunggu konfirmasi dari pemilik kosan.
+                                Menunggu konfirmasi dan persetujuan dari pemilik kosan.
                             @elseif($pemesanan->status === 'disetujui')
-                                Pesanan sudah disetujui.
+                                Pesanan Anda telah disetujui oleh pemilik kos!
                             @elseif($pemesanan->status === 'ditolak')
                                 Pesanan ditolak oleh pemilik kosan.
                             @else
@@ -41,6 +44,77 @@
                         </p>
                     </div>
                     <span class="nb-kicker border-2 border-black px-2 py-1 {{ $sc['tone'] }}">{{ ucfirst($pemesanan->status) }}</span>
+                </div>
+            </section>
+
+            <!-- Informasi Rekening & Bukti Pembayaran -->
+            <section class="nb-card p-5 md:p-6">
+                <h3 class="text-3xl font-black leading-none">Pembayaran & Bukti Transfer</h3>
+                <p class="nb-kicker mt-1">Lakukan transfer ke rekening pemilik kos di bawah ini, lalu unggah bukti transfer.</p>
+
+                <div class="nb-card-soft mt-4 p-4">
+                    <p class="nb-kicker mb-2">Rekening Tujuan Transfer</p>
+                    <div class="grid gap-3 sm:grid-cols-3">
+                        <div>
+                            <span class="nb-kicker">Bank / E-Wallet</span>
+                            <p class="text-xl font-black">{{ $pemesanan->kosan->nama_bank ?? 'Hubungi Pemilik' }}</p>
+                        </div>
+                        <div>
+                            <span class="nb-kicker">Nomor Rekening</span>
+                            <p class="text-xl font-black">{{ $pemesanan->kosan->nomor_rekening ?? ($pemesanan->kosan->pemilik->no_telepon ?? '-') }}</p>
+                        </div>
+                        <div>
+                            <span class="nb-kicker">Atas Nama</span>
+                            <p class="text-xl font-black">{{ $pemesanan->kosan->nama_rekening ?? ($pemesanan->kosan->pemilik->nama ?? '-') }}</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 border-t-2 border-black pt-3 flex justify-between items-center">
+                        <span class="font-bold">Total Pembayaran:</span>
+                        <span class="text-2xl font-black">Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <p class="nb-kicker mb-2">Status Bukti Transfer</p>
+                    @if($pemesanan->bukti_pembayaran_url)
+                        <div class="nb-card-soft p-4">
+                            <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-20 w-20 shrink-0 border-2 border-black overflow-hidden bg-gray-200">
+                                        <img src="{{ $pemesanan->bukti_pembayaran_url }}" alt="Bukti Transfer" class="h-full w-full object-cover">
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-lg">Bukti Transfer Terunggah</p>
+                                        <p class="nb-kicker">Menunggu verifikasi pemilik</p>
+                                    </div>
+                                </div>
+                                <a href="{{ $pemesanan->bukti_pembayaran_url }}" target="_blank" class="nb-btn nb-btn-secondary py-1 px-3 text-sm">
+                                    Lihat Ukuran Penuh ↗
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="nb-card-soft border-2 border-dashed border-red-500 bg-red-50 p-4 text-center">
+                            <p class="text-lg font-bold text-red-700">Belum Ada Bukti Transfer</p>
+                            <p class="text-sm font-medium text-gray-700 mt-1">Silakan transfer dan unggah foto bukti struk/screenshot transfer Anda agar pesanan dapat segera diproses.</p>
+                        </div>
+                    @endif
+
+                    @if($pemesanan->status === 'pending')
+                        <form method="POST" action="{{ route('user.pemesanan.upload_bukti', $pemesanan) }}" enctype="multipart/form-data" class="mt-4 space-y-3">
+                            @csrf
+                            <label class="nb-label">{{ $pemesanan->bukti_pembayaran ? 'Ganti / Unggah Ulang Bukti Transfer' : 'Unggah Bukti Transfer Sekarang' }}</label>
+                            <div class="flex flex-col sm:flex-row gap-2">
+                                <input type="file" name="bukti_pembayaran" accept="image/*" required class="nb-input bg-white flex-1">
+                                <button type="submit" class="nb-btn nb-btn-primary whitespace-nowrap">Kirim Bukti</button>
+                            </div>
+                            @error('bukti_pembayaran')<p class="nb-error">{{ $message }}</p>@enderror
+                        </form>
+                    @endif
+                </div>
+
+                <div class="mt-4 border-2 border-black bg-yellow-100 p-3 text-sm font-bold">
+                    ⚡ <strong>Aturan Alokasi Kamar (First-Approved):</strong> Pemilik kos akan memverifikasi dan menyetujui pemesanan berdasarkan yang bukti transfernya masuk terlebih dahulu. Jika kamar habis, pesanan pending lainnya otomatis dibatalkan.
                 </div>
             </section>
 
@@ -108,28 +182,10 @@
                     </div>
                     @if($pemesanan->catatan)
                         <div>
-                            <span class="nb-kicker">Catatan</span>
+                            <span class="nb-kicker">Catatan / Keterangan</span>
                             <p class="nb-card-soft mt-2 p-3 text-lg font-medium">{{ $pemesanan->catatan }}</p>
                         </div>
                     @endif
-                </div>
-            </section>
-
-            <section class="nb-card p-5 md:p-6">
-                <h3 class="text-3xl font-black leading-none">Ringkasan Biaya</h3>
-                <div class="mt-5 space-y-3 text-lg font-medium">
-                    <div class="flex items-center justify-between border-b-2 border-black pb-2">
-                        <span>Harga per bulan</span>
-                        <span class="font-black">Rp {{ number_format($pemesanan->kosan->harga_per_bulan, 0, ',', '.') }}</span>
-                    </div>
-                    <div class="flex items-center justify-between border-b-2 border-black pb-2">
-                        <span>Durasi</span>
-                        <span class="font-black">{{ $pemesanan->durasi_bulan }} bulan</span>
-                    </div>
-                    <div class="flex items-center justify-between text-2xl font-black">
-                        <span>Total</span>
-                        <span>Rp {{ number_format($pemesanan->total_harga, 0, ',', '.') }}</span>
-                    </div>
                 </div>
             </section>
 

@@ -110,6 +110,28 @@
                     </div>
                 </section>
 
+                <section class="nb-card p-5 md:p-6">
+                    <h3 class="text-3xl font-black leading-none">Rekening Pembayaran</h3>
+                    <p class="nb-kicker mt-1">Rekening ini akan ditampilkan kepada calon penyewa untuk transfer pembayaran sewa kos.</p>
+                    <div class="mt-5 grid gap-4 md:grid-cols-3">
+                        <div>
+                            <label class="nb-label">Nama Bank / E-Wallet</label>
+                            <input type="text" name="nama_bank" value="{{ old('nama_bank', $kosan->nama_bank) }}" placeholder="Contoh: BCA / Mandiri / GoPay" class="nb-input">
+                            @error('nama_bank')<p class="nb-error">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <label class="nb-label">Nomor Rekening</label>
+                            <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening', $kosan->nomor_rekening) }}" placeholder="Contoh: 1234567890" class="nb-input">
+                            @error('nomor_rekening')<p class="nb-error">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <label class="nb-label">Atas Nama</label>
+                            <input type="text" name="nama_rekening" value="{{ old('nama_rekening', $kosan->nama_rekening) }}" placeholder="Contoh: Budi Santoso" class="nb-input">
+                            @error('nama_rekening')<p class="nb-error">{{ $message }}</p>@enderror
+                        </div>
+                    </div>
+                </section>
+
                 @if($kosan->fotos->count())
                     <section class="nb-card p-5 md:p-6">
                         <h3 class="text-3xl font-black leading-none">Foto Saat Ini</h3>

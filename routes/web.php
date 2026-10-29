@@ -72,6 +72,7 @@ Route::middleware($pemilikMiddleware)->prefix('pemilik')->name('pemilik.')->grou
 Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', [UserPemesananController::class, 'dashboard'])->name('dashboard');
     Route::resource('pemesanan', UserPemesananController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
+    Route::post('pemesanan/{pemesanan}/bukti', [UserPemesananController::class, 'uploadBukti'])->name('pemesanan.upload_bukti');
     Route::post('/kosan/{kosan}/ulasan', [UserKosanController::class, 'ulasan'])->name('kosan.ulasan');
 });
 
