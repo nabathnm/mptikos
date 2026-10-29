@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Fasilitas;
 use App\Models\Kosan;
+use App\Models\Pemesanan;
+use App\Models\Ulasan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class KosanController extends Controller
 {
     public function show($id)
     {
-        $response = $this->apiCall('GET', "kosan/{$id}");
-        if (!$response->successful()) {
-            abort(404, 'Kosan tidak ditemukan');
-        }
-        $kosan = json_decode(json_encode($response->json()['data']));
+        $kosan = Kosan::with(['pemilik:id,nama,no_telepon', 'fotoUtama', 'fotos', 'ulasans.user:id,nama'])
+            ->findOrFail($id);
 
-        $ulasans = collect($kosan->ulasans ?? []);
+        $ulasans = $kosan->ulasans;
         $ratingRata = $ulasans->avg('rating') ?? 0;
         $totalUlasan = $ulasans->count();
 
@@ -26,13 +26,11 @@ class KosanController extends Controller
         $bisaUlas = false;
         if (Auth::check()) {
             $sudahUlasan = $ulasans->where('user_id', Auth::id())->isNotEmpty();
-            // Cek apakah ada pesanan disetujui (panggil API pemesanan atau periksa jika ada relasi)
-            // Namun API kosan/{id} tidak mengembalikan pemesanan user ini, jadi kita harus memanggil API pemesanan
-            $pemesananResp = $this->apiCall('GET', 'pemesanan', ['kosan_id' => $id, 'user_id' => Auth::id(), 'status' => 'disetujui']);
-            if ($pemesananResp->successful()) {
-                $pemesanans = $pemesananResp->json()['data']['data'] ?? [];
-                $bisaUlas = count($pemesanans) > 0;
-            }
+            // Cek apakah ada pesanan disetujui
+            $bisaUlas = Pemesanan::where('user_id', Auth::id())
+                ->where('kosan_id', $id)
+                ->where('status', 'disetujui')
+                ->exists();
         }
 
         return view('user.show', compact('kosan', 'ratingRata', 'totalUlasan', 'sudahUlasan', 'bisaUlas'));
@@ -40,37 +38,56 @@ class KosanController extends Controller
 
     public function index(Request $request)
     {
-        $params = ['tersedia' => 1, 'per_page' => 12];
-        $kosanResponse = $this->apiCall('GET', 'kosan', $params);
-        $kosans = $this->paginateApiResponse($kosanResponse->json(), $request);
-        
-        $fasilitasResponse = $this->apiCall('GET', 'fasilitas');
-        $fasilitasList = json_decode(json_encode($fasilitasResponse->json()['data']['data'] ?? []));
-        if (empty($fasilitasList)) {
-            $fasilitasList = json_decode(json_encode($fasilitasResponse->json()['data'] ?? [])); // Fallback if no pagination in fasilitas
-        }
-        
+        $query = Kosan::with('fotoUtama')
+            ->where('status', 'aktif')
+            ->where('kamar_tersedia', '>', 0);
+
+        $kosans = $query->latest()->paginate(12);
+
+        $fasilitasList = Fasilitas::orderBy('nama_fasilitas')->get();
+
         return view('user.home', compact('kosans', 'fasilitasList'));
     }
 
     public function search(Request $request)
     {
-        $params = $request->all();
-        $params['tersedia'] = 1;
-        $params['per_page'] = 12;
-        // Map harga_max to max_harga for API
+        $query = Kosan::with('fotoUtama')
+            ->where('status', 'aktif')
+            ->where('kamar_tersedia', '>', 0);
+
+        // Filter pencarian
+        if ($request->filled('q')) {
+            $query->where(function($q) use ($request) {
+                $q->where('nama_kosan', 'like', '%' . $request->q . '%')
+                  ->orWhere('kota', 'like', '%' . $request->q . '%')
+                  ->orWhere('alamat', 'like', '%' . $request->q . '%');
+            });
+        }
+        if ($request->filled('kota')) {
+            $query->where('kota', 'like', '%' . $request->kota . '%');
+        }
+        if ($request->filled('tipe')) {
+            $query->where('tipe', $request->tipe);
+        }
+        if ($request->filled('min_harga')) {
+            $query->where('harga_per_bulan', '>=', $request->min_harga);
+        }
         if ($request->filled('harga_max')) {
-            $params['max_harga'] = $request->harga_max;
+            $query->where('harga_per_bulan', '<=', $request->harga_max);
+        }
+        if ($request->filled('max_harga')) {
+            $query->where('harga_per_bulan', '<=', $request->max_harga);
+        }
+        if ($request->filled('fasilitas')) {
+            $fasilitas = is_array($request->fasilitas) ? $request->fasilitas : [$request->fasilitas];
+            foreach ($fasilitas as $f) {
+                $query->whereJsonContains('fasilitas', $f);
+            }
         }
 
-        $kosanResponse = $this->apiCall('GET', 'kosan', $params);
-        $kosans = $this->paginateApiResponse($kosanResponse->json(), $request);
-            
-        $fasilitasResponse = $this->apiCall('GET', 'fasilitas');
-        $fasilitasList = json_decode(json_encode($fasilitasResponse->json()['data']['data'] ?? []));
-        if (empty($fasilitasList)) {
-            $fasilitasList = json_decode(json_encode($fasilitasResponse->json()['data'] ?? []));
-        }
+        $kosans = $query->latest()->paginate(12);
+
+        $fasilitasList = Fasilitas::orderBy('nama_fasilitas')->get();
 
         return view('user.home', compact('kosans', 'fasilitasList'));
     }
@@ -82,17 +99,32 @@ class KosanController extends Controller
             'komentar' => 'nullable|string'
         ]);
 
-        $response = $this->apiCall('POST', 'ulasan', [
-            'kosan_id' => $id,
-            'rating' => $request->rating,
-            'komentar' => $request->komentar
-        ]);
+        // Cek apakah user pernah menyewa kos ini dan disetujui
+        $sudahSewa = Pemesanan::where('user_id', Auth::id())
+            ->where('kosan_id', $id)
+            ->where('status', 'disetujui')
+            ->exists();
 
-        if ($response->successful()) {
-            return back()->with('success', 'Ulasan berhasil ditambahkan!');
+        if (!$sudahSewa) {
+            return back()->with('error', 'Anda hanya dapat mengulas kosan yang pernah Anda sewa dan disetujui.');
         }
 
-        $errorMsg = $response->json()['message'] ?? 'Gagal menambahkan ulasan.';
-        return back()->with('error', $errorMsg);
+        // Cek sudah pernah mengulas
+        $sudahUlas = Ulasan::where('user_id', Auth::id())
+            ->where('kosan_id', $id)
+            ->exists();
+
+        if ($sudahUlas) {
+            return back()->with('error', 'Anda sudah memberikan ulasan untuk kosan ini.');
+        }
+
+        Ulasan::create([
+            'user_id'  => Auth::id(),
+            'kosan_id' => $id,
+            'rating'   => $request->rating,
+            'komentar' => $request->komentar,
+        ]);
+
+        return back()->with('success', 'Ulasan berhasil ditambahkan!');
     }
 }
