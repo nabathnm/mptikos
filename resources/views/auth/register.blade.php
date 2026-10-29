@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daftar — EasyKos</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
 <body class="min-h-screen antialiased">
     <div class="nb-shell min-h-screen flex items-center py-10">
@@ -18,8 +22,8 @@
 
                 <div>
                     <label class="nb-label">Daftar sebagai</label>
-                    <select name="role" x-model="role" required class="nb-select">
-                        <option value="user" @selected(old('role', request('role')) === 'user')>Pencari Kos</option>
+                    <select name="role" id="role-select" x-model="role" onchange="toggleRole(this.value)" required class="nb-select">
+                        <option value="user" @selected(old('role', request('role', 'user')) === 'user')>Pencari Kos</option>
                         <option value="pemilik" @selected(old('role', request('role')) === 'pemilik')>Pemilik Kos</option>
                     </select>
                     @error('role')<p class="nb-error">{{ $message }}</p>@enderror
@@ -46,8 +50,12 @@
                     @error('no_telepon')<p class="nb-error">{{ $message }}</p>@enderror
                 </div>
 
-                <!-- Bagian Khusus Pemilik Kos: Rekening Pembayaran -->
-                <div x-show="role === 'pemilik'" x-transition class="border-2 border-black bg-yellow-50 p-4 space-y-4">
+                <!-- Bagian Khusus Pemilik Kos: Rekening Pembayaran (Hanya muncul jika Pemilik Kos dipilih) -->
+                <div id="section-rekening"
+                     x-show="role === 'pemilik'"
+                     x-cloak
+                     style="display: {{ old('role', request('role', 'user')) === 'pemilik' ? 'block' : 'none' }};"
+                     class="border-2 border-black bg-yellow-50 p-4 space-y-4">
                     <div>
                         <p class="text-xl font-black">Informasi Rekening Pembayaran</p>
                         <p class="nb-kicker mt-1">Rekening ini otomatis digunakan untuk semua kosan Anda agar penyewa bisa transfer biaya sewa.</p>
@@ -101,5 +109,14 @@
             </p>
         </section>
     </div>
+
+    <script>
+        function toggleRole(role) {
+            const el = document.getElementById('section-rekening');
+            if (el) {
+                el.style.display = (role === 'pemilik') ? 'block' : 'none';
+            }
+        }
+    </script>
 </body>
 </html>
