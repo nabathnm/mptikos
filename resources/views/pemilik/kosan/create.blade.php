@@ -92,31 +92,6 @@
                 </section>
 
                 <section class="nb-card p-5 md:p-6">
-                    <div class="flex flex-wrap items-center justify-between gap-2">
-                        <h3 class="text-3xl font-black leading-none">Rekening Khusus Kosan</h3>
-                        <span class="nb-kicker border-2 border-black bg-blue-100 px-2 py-1">Opsional</span>
-                    </div>
-                    <p class="nb-kicker mt-1">Kosongkan jika ingin otomatis menggunakan rekening dari profil akun Anda ({{ auth()->user()->nama_bank ? auth()->user()->nama_bank . ' - ' . auth()->user()->nomor_rekening : 'belum diset di profil' }}).</p>
-                    <div class="mt-5 grid gap-4 md:grid-cols-3">
-                        <div>
-                            <label class="nb-label">Nama Bank / E-Wallet</label>
-                            <input type="text" name="nama_bank" value="{{ old('nama_bank') }}" placeholder="{{ auth()->user()->nama_bank ?: 'Contoh: BCA' }}" class="nb-input">
-                            @error('nama_bank')<p class="nb-error">{{ $message }}</p>@enderror
-                        </div>
-                        <div>
-                            <label class="nb-label">Nomor Rekening</label>
-                            <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening') }}" placeholder="{{ auth()->user()->nomor_rekening ?: 'Contoh: 1234567890' }}" class="nb-input">
-                            @error('nomor_rekening')<p class="nb-error">{{ $message }}</p>@enderror
-                        </div>
-                        <div>
-                            <label class="nb-label">Atas Nama</label>
-                            <input type="text" name="nama_rekening" value="{{ old('nama_rekening') }}" placeholder="{{ auth()->user()->nama_rekening ?: auth()->user()->nama }}" class="nb-input">
-                            @error('nama_rekening')<p class="nb-error">{{ $message }}</p>@enderror
-                        </div>
-                    </div>
-                </section>
-
-                <section class="nb-card p-5 md:p-6">
                     <h3 class="text-3xl font-black leading-none">Foto Kosan</h3>
                     <p class="nb-kicker mt-1">Upload minimal 1 foto. JPG, PNG, GIF. Maks 2MB/foto.</p>
                     <label for="fotos" class="nb-card-soft mt-5 flex cursor-pointer flex-col items-center justify-center border-2 border-dashed border-black p-6 text-center">
