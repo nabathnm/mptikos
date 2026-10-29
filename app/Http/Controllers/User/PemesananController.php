@@ -20,7 +20,7 @@ class PemesananController extends Controller
      */
     public function dashboard()
     {
-        $pemesanans = Pemesanan::with(['kosan.fotoUtama', 'kosan.pemilik:id,nama,no_telepon'])
+        $pemesanans = Pemesanan::with(['kosan.fotoUtama', 'kosan.pemilik'])
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
@@ -35,7 +35,7 @@ class PemesananController extends Controller
 
     public function create(Request $request)
     {
-        $kosan = Kosan::with(['fotoUtama', 'pemilik:id,nama'])
+        $kosan = Kosan::with(['fotoUtama', 'pemilik'])
             ->findOrFail($request->kosan_id);
 
         if ($kosan->kamar_tersedia <= 0) {
@@ -118,7 +118,7 @@ class PemesananController extends Controller
 
     public function show($id)
     {
-        $pemesanan = Pemesanan::with(['kosan.fotoUtama', 'kosan.pemilik:id,nama,no_telepon'])
+        $pemesanan = Pemesanan::with(['kosan.fotoUtama', 'kosan.pemilik'])
             ->where('user_id', Auth::id())
             ->findOrFail($id);
 

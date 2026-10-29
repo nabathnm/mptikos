@@ -66,6 +66,24 @@
                 </section>
 
                 <section class="nb-card p-5 md:p-6">
+                    <h3 class="text-3xl font-black leading-none">Ringkasan Biaya</h3>
+                    <div class="mt-5 space-y-3">
+                        <div class="flex items-center justify-between border-b-2 border-black pb-2 text-lg font-medium">
+                            <span>Harga per bulan</span>
+                            <span>Rp {{ number_format($kosan->harga_per_bulan, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="flex items-center justify-between border-b-2 border-black pb-2 text-lg font-medium">
+                            <span>Durasi</span>
+                            <span x-text="durasi + ' bulan'"></span>
+                        </div>
+                        <div class="flex items-center justify-between text-2xl font-black">
+                            <span>Total yang Harus Ditransfer</span>
+                            <span x-text="'Rp ' + totalHarga.toLocaleString('id-ID')"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="nb-card p-5 md:p-6">
                     <h3 class="text-3xl font-black leading-none">Informasi Pembayaran</h3>
                     <p class="nb-kicker mt-1">Silakan transfer sesuai total biaya sewa ke rekening pemilik kos berikut:</p>
 
@@ -95,24 +113,6 @@
 
                     <div class="mt-4 border-2 border-black bg-yellow-100 p-3 text-sm font-bold">
                         ⚡ <strong>Aturan Alokasi Kamar (First-Approved):</strong> Kamar akan diberikan kepada penyewa yang bukti transfernya disetujui lebih dahulu oleh pemilik. Jika kuota kamar habis, pesanan lain otomatis dibatalkan.
-                    </div>
-                </section>
-
-                <section class="nb-card p-5 md:p-6">
-                    <h3 class="text-3xl font-black leading-none">Ringkasan Biaya</h3>
-                    <div class="mt-5 space-y-3">
-                        <div class="flex items-center justify-between border-b-2 border-black pb-2 text-lg font-medium">
-                            <span>Harga per bulan</span>
-                            <span>Rp {{ number_format($kosan->harga_per_bulan, 0, ',', '.') }}</span>
-                        </div>
-                        <div class="flex items-center justify-between border-b-2 border-black pb-2 text-lg font-medium">
-                            <span>Durasi</span>
-                            <span x-text="durasi + ' bulan'"></span>
-                        </div>
-                        <div class="flex items-center justify-between text-2xl font-black">
-                            <span>Total yang Harus Ditransfer</span>
-                            <span x-text="'Rp ' + totalHarga.toLocaleString('id-ID')"></span>
-                        </div>
                     </div>
                 </section>
 

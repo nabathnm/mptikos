@@ -14,7 +14,7 @@ class KosanController extends Controller
 {
     public function show($id)
     {
-        $kosan = Kosan::with(['pemilik:id,nama,no_telepon', 'fotoUtama', 'fotos', 'ulasans.user:id,nama'])
+        $kosan = Kosan::with(['pemilik', 'fotoUtama', 'fotos', 'ulasans.user:id,nama'])
             ->findOrFail($id);
 
         $ulasans = $kosan->ulasans;
