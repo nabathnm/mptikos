@@ -73,6 +73,38 @@
                         @error('no_telepon')<p class="nb-error">{{ $message }}</p>@enderror
                     </div>
 
+                    @if($user->role === 'pemilik')
+                        <div class="border-2 border-black bg-yellow-50 p-4 space-y-4">
+                            <div>
+                                <p class="text-xl font-black">Informasi Rekening Pembayaran</p>
+                                <p class="nb-kicker mt-1">Rekening ini otomatis digunakan untuk semua kosan Anda agar penyewa bisa mentransfer biaya sewa.</p>
+                            </div>
+
+                            <div class="grid gap-3 sm:grid-cols-2">
+                                <div>
+                                    <label class="nb-label">Nama Bank / E-Wallet</label>
+                                    <input type="text" name="nama_bank" value="{{ old('nama_bank', $user->nama_bank) }}"
+                                           placeholder="Contoh: BCA / Mandiri / GoPay" class="nb-input bg-white">
+                                    @error('nama_bank')<p class="nb-error">{{ $message }}</p>@enderror
+                                </div>
+
+                                <div>
+                                    <label class="nb-label">Nomor Rekening</label>
+                                    <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening', $user->nomor_rekening) }}"
+                                           placeholder="Contoh: 1234567890" class="nb-input bg-white">
+                                    @error('nomor_rekening')<p class="nb-error">{{ $message }}</p>@enderror
+                                </div>
+
+                                <div class="sm:col-span-2">
+                                    <label class="nb-label">Atas Nama Pemilik Rekening</label>
+                                    <input type="text" name="nama_rekening" value="{{ old('nama_rekening', $user->nama_rekening) }}"
+                                           placeholder="Contoh: Budi Santoso" class="nb-input bg-white">
+                                    @error('nama_rekening')<p class="nb-error">{{ $message }}</p>@enderror
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <p class="nb-kicker">
                         Role:
                         <span class="font-black capitalize">{{ $user->role === 'pemilik' ? 'Pemilik Kos' : 'Pencari Kos' }}</span>

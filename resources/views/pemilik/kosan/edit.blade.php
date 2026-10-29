@@ -97,22 +97,25 @@
                 </section>
 
                 <section class="nb-card p-5 md:p-6">
-                    <h3 class="text-3xl font-black leading-none">Rekening Pembayaran</h3>
-                    <p class="nb-kicker mt-1">Rekening ini akan ditampilkan kepada calon penyewa untuk transfer pembayaran sewa kos.</p>
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h3 class="text-3xl font-black leading-none">Rekening Khusus Kosan</h3>
+                        <span class="nb-kicker border-2 border-black bg-blue-100 px-2 py-1">Opsional</span>
+                    </div>
+                    <p class="nb-kicker mt-1">Kosongkan jika ingin otomatis menggunakan rekening dari profil akun Anda ({{ auth()->user()->nama_bank ? auth()->user()->nama_bank . ' - ' . auth()->user()->nomor_rekening : 'belum diset di profil' }}).</p>
                     <div class="mt-5 grid gap-4 md:grid-cols-3">
                         <div>
                             <label class="nb-label">Nama Bank / E-Wallet</label>
-                            <input type="text" name="nama_bank" value="{{ old('nama_bank', $kosan->nama_bank) }}" placeholder="Contoh: BCA / Mandiri / GoPay" class="nb-input">
+                            <input type="text" name="nama_bank" value="{{ old('nama_bank', $kosan->nama_bank) }}" placeholder="{{ auth()->user()->nama_bank ?: 'Contoh: BCA' }}" class="nb-input">
                             @error('nama_bank')<p class="nb-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="nb-label">Nomor Rekening</label>
-                            <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening', $kosan->nomor_rekening) }}" placeholder="Contoh: 1234567890" class="nb-input">
+                            <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening', $kosan->nomor_rekening) }}" placeholder="{{ auth()->user()->nomor_rekening ?: 'Contoh: 1234567890' }}" class="nb-input">
                             @error('nomor_rekening')<p class="nb-error">{{ $message }}</p>@enderror
                         </div>
                         <div>
                             <label class="nb-label">Atas Nama</label>
-                            <input type="text" name="nama_rekening" value="{{ old('nama_rekening', $kosan->nama_rekening) }}" placeholder="Contoh: Budi Santoso" class="nb-input">
+                            <input type="text" name="nama_rekening" value="{{ old('nama_rekening', $kosan->nama_rekening) }}" placeholder="{{ auth()->user()->nama_rekening ?: auth()->user()->nama }}" class="nb-input">
                             @error('nama_rekening')<p class="nb-error">{{ $message }}</p>@enderror
                         </div>
                     </div>

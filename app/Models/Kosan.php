@@ -62,4 +62,19 @@ class Kosan extends Model
     {
         return $this->hasMany(Ulasan::class);
     }
+
+    public function getRekeningBankAttribute(): ?string
+    {
+        return $this->nama_bank ?: ($this->pemilik->nama_bank ?? null);
+    }
+
+    public function getRekeningNomorAttribute(): ?string
+    {
+        return $this->nomor_rekening ?: ($this->pemilik->nomor_rekening ?? null);
+    }
+
+    public function getRekeningNamaAttribute(): ?string
+    {
+        return $this->nama_rekening ?: ($this->pemilik->nama_rekening ?? ($this->pemilik->nama ?? null));
+    }
 }

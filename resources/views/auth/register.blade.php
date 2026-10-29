@@ -13,13 +13,12 @@
             <h1 class="mt-2 text-5xl font-black leading-none">Daftar Akun</h1>
             <p class="mt-2 text-xl font-semibold">Pilih role, isi data inti, langsung pakai.</p>
 
-            <form method="POST" action="{{ route('register') }}" class="mt-7 space-y-4">
+            <form method="POST" action="{{ route('register') }}" x-data="{ role: '{{ old('role', request('role', 'user')) }}' }" class="mt-7 space-y-4">
                 @csrf
 
                 <div>
                     <label class="nb-label">Daftar sebagai</label>
-                    <select name="role" required
-                            class="nb-select">
+                    <select name="role" x-model="role" required class="nb-select">
                         <option value="user" @selected(old('role', request('role')) === 'user')>Pencari Kos</option>
                         <option value="pemilik" @selected(old('role', request('role')) === 'pemilik')>Pemilik Kos</option>
                     </select>
@@ -38,6 +37,44 @@
                     <input type="email" name="email" value="{{ old('email') }}" required
                            class="nb-input" placeholder="nama@email.com">
                     @error('email')<p class="nb-error">{{ $message }}</p>@enderror
+                </div>
+
+                <div>
+                    <label class="nb-label">Nomor WhatsApp / Telepon</label>
+                    <input type="text" name="no_telepon" value="{{ old('no_telepon') }}"
+                           class="nb-input" placeholder="Contoh: 08123456789">
+                    @error('no_telepon')<p class="nb-error">{{ $message }}</p>@enderror
+                </div>
+
+                <!-- Bagian Khusus Pemilik Kos: Rekening Pembayaran -->
+                <div x-show="role === 'pemilik'" x-transition class="border-2 border-black bg-yellow-50 p-4 space-y-4">
+                    <div>
+                        <p class="text-xl font-black">Informasi Rekening Pembayaran</p>
+                        <p class="nb-kicker mt-1">Rekening ini otomatis digunakan untuk semua kosan Anda agar penyewa bisa transfer biaya sewa.</p>
+                    </div>
+
+                    <div class="grid gap-3 sm:grid-cols-2">
+                        <div>
+                            <label class="nb-label">Nama Bank / E-Wallet</label>
+                            <input type="text" name="nama_bank" value="{{ old('nama_bank') }}"
+                                   placeholder="Contoh: BCA / Mandiri / GoPay" class="nb-input bg-white">
+                            @error('nama_bank')<p class="nb-error">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div>
+                            <label class="nb-label">Nomor Rekening</label>
+                            <input type="text" name="nomor_rekening" value="{{ old('nomor_rekening') }}"
+                                   placeholder="Contoh: 1234567890" class="nb-input bg-white">
+                            @error('nomor_rekening')<p class="nb-error">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="nb-label">Atas Nama Pemilik Rekening</label>
+                            <input type="text" name="nama_rekening" value="{{ old('nama_rekening') }}"
+                                   placeholder="Contoh: Budi Santoso (kosongkan jika sama dengan nama akun)" class="nb-input bg-white">
+                            @error('nama_rekening')<p class="nb-error">{{ $message }}</p>@enderror
+                        </div>
+                    </div>
                 </div>
 
                 <div>

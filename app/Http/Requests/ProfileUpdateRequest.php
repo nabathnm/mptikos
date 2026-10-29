@@ -14,6 +14,9 @@ class ProfileUpdateRequest extends FormRequest
             'nama' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
             'no_telepon' => ['nullable', 'string', 'max:30'],
+            'nama_bank' => ['nullable', 'string', 'max:100'],
+            'nomor_rekening' => ['nullable', 'string', 'max:50'],
+            'nama_rekening' => ['nullable', 'string', 'max:150'],
         ];
     }
 }

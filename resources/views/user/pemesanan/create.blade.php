@@ -73,15 +73,15 @@
                         <div class="grid gap-3 sm:grid-cols-3">
                             <div>
                                 <span class="nb-kicker">Bank / E-Wallet</span>
-                                <p class="text-xl font-black">{{ $kosan->nama_bank ?? 'Hubungi Pemilik' }}</p>
+                                <p class="text-xl font-black">{{ $kosan->rekening_bank ?? 'Hubungi Pemilik' }}</p>
                             </div>
                             <div>
                                 <span class="nb-kicker">Nomor Rekening</span>
-                                <p class="text-xl font-black">{{ $kosan->nomor_rekening ?? ($kosan->pemilik->no_telepon ?? '-') }}</p>
+                                <p class="text-xl font-black">{{ $kosan->rekening_nomor ?? ($kosan->pemilik->no_telepon ?? '-') }}</p>
                             </div>
                             <div>
                                 <span class="nb-kicker">Atas Nama</span>
-                                <p class="text-xl font-black">{{ $kosan->nama_rekening ?? ($kosan->pemilik->nama ?? '-') }}</p>
+                                <p class="text-xl font-black">{{ $kosan->rekening_nama ?? ($kosan->pemilik->nama ?? '-') }}</p>
                             </div>
                         </div>
                     </div>
