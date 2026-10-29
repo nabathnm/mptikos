@@ -9,10 +9,6 @@
 
     <div class="pt-6">
         <div class="nb-shell max-w-3xl space-y-6">
-            @if(session('error'))
-                <div class="nb-flash nb-flash-error">{{ session('error') }}</div>
-            @endif
-
             <form method="POST" action="{{ route('user.pemesanan.store') }}" enctype="multipart/form-data" x-data="{
                 harga: {{ $kosan->harga_per_bulan }},
                 durasi: {{ old('durasi_bulan', 1) }},
@@ -104,10 +100,77 @@
                         </div>
                     </div>
 
-                    <div class="mt-5">
+                    <div class="mt-5"
+                         x-data="{
+                             fileName: '',
+                             fileSize: '',
+                             previewUrl: '',
+                             handleFile(e) {
+                                 const file = e.target.files[0];
+                                 if (file) {
+                                     this.fileName = file.name;
+                                     this.fileSize = (file.size / 1024).toFixed(1) + ' KB';
+                                     const reader = new FileReader();
+                                     reader.onload = (ev) => { this.previewUrl = ev.target.result; };
+                                     reader.readAsDataURL(file);
+                                 } else {
+                                     this.resetFile();
+                                 }
+                             },
+                             resetFile() {
+                                 this.fileName = '';
+                                 this.fileSize = '';
+                                 this.previewUrl = '';
+                                 if (this.$refs.fileInput) this.$refs.fileInput.value = '';
+                             }
+                         }">
                         <label class="nb-label">Unggah Bukti Transfer (Opsional)</label>
                         <p class="nb-kicker mb-2">Bisa diunggah sekarang atau nanti setelah pesanan dibuat (Format: JPG, PNG, maks 10MB).</p>
-                        <input type="file" name="bukti_pembayaran" accept="image/*" class="nb-input bg-white">
+
+                        <input type="file"
+                               name="bukti_pembayaran"
+                               accept="image/*"
+                               x-ref="fileInput"
+                               class="hidden"
+                               @change="handleFile($event)">
+
+                        <!-- Tampilan saat belum pilih file -->
+                        <div x-show="!fileName" class="flex flex-wrap items-center gap-3">
+                            <button type="button"
+                                    @click="$refs.fileInput.click()"
+                                    class="nb-btn bg-white hover:bg-gray-50 flex items-center gap-2">
+                                <span>📁</span> Pilih File Bukti Transfer
+                            </button>
+                            <span class="text-sm font-medium text-gray-500">Belum ada file dipilih</span>
+                        </div>
+
+                        <!-- Tampilan saat SUDAH pilih file (tidak menampilkan 'Choose file') -->
+                        <div x-show="fileName" x-cloak class="nb-card-soft p-3 flex flex-wrap items-center justify-between gap-3 border-2 border-green-600 bg-green-50">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <template x-if="previewUrl">
+                                    <div class="h-14 w-14 shrink-0 border-2 border-black overflow-hidden bg-white">
+                                        <img :src="previewUrl" alt="Preview Bukti" class="h-full w-full object-cover">
+                                    </div>
+                                </template>
+                                <div class="min-w-0">
+                                    <p class="font-bold text-base truncate text-gray-900" x-text="fileName"></p>
+                                    <p class="nb-kicker text-xs text-gray-600" x-text="fileSize"></p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button"
+                                        @click="$refs.fileInput.click()"
+                                        class="nb-btn py-1 px-3 text-sm bg-white">
+                                    Ganti File
+                                </button>
+                                <button type="button"
+                                        @click="resetFile()"
+                                        class="nb-btn py-1 px-3 text-sm bg-red-100 text-red-700 border-red-700 hover:bg-red-200">
+                                    Batal
+                                </button>
+                            </div>
+                        </div>
+
                         @error('bukti_pembayaran')<p class="nb-error">{{ $message }}</p>@enderror
                     </div>
 

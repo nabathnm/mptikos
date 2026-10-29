@@ -99,22 +99,26 @@
             </section>
 
             <section class="nb-card p-5 md:p-6">
-                <h3 class="text-3xl font-black leading-none">Bukti Pembayaran Transfer</h3>
-                <p class="nb-kicker mt-1">Periksa bukti transfer sebelum menyetujui pesanan ini.</p>
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h3 class="text-3xl font-black leading-none">Bukti Pembayaran Transfer</h3>
+                        <p class="nb-kicker mt-1">Periksa bukti transfer sebelum menyetujui pesanan ini.</p>
+                    </div>
+                    @if($pemesanan->bukti_pembayaran_url)
+                        <a href="{{ $pemesanan->bukti_pembayaran_url }}" target="_blank" class="nb-btn nb-btn-secondary py-2 px-4 text-sm whitespace-nowrap">
+                            Buka Foto Penuh ↗
+                        </a>
+                    @endif
+                </div>
 
                 <div class="mt-4">
                     @if($pemesanan->bukti_pembayaran_url)
                         <div class="nb-card-soft p-4">
-                            <div class="flex flex-col sm:flex-row gap-4 items-start justify-between">
-                                <div class="space-y-3">
-                                    <div class="max-w-sm border-2 border-black overflow-hidden bg-gray-200">
-                                        <img src="{{ $pemesanan->bukti_pembayaran_url }}" alt="Bukti Transfer" class="w-full h-auto max-h-80 object-contain">
-                                    </div>
-                                    <p class="nb-kicker">Foto bukti struk / mutasi dari penyewa</p>
+                            <div class="space-y-3">
+                                <div class="max-w-sm border-2 border-black overflow-hidden bg-gray-200">
+                                    <img src="{{ $pemesanan->bukti_pembayaran_url }}" alt="Bukti Transfer" class="w-full h-auto max-h-80 object-contain">
                                 </div>
-                                <a href="{{ $pemesanan->bukti_pembayaran_url }}" target="_blank" class="nb-btn nb-btn-secondary py-2 px-4 text-sm whitespace-nowrap">
-                                    Buka Foto Penuh ↗
-                                </a>
+                                <p class="nb-kicker">Foto bukti struk / mutasi dari penyewa</p>
                             </div>
                         </div>
                     @else
