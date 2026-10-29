@@ -44,16 +44,6 @@ class User extends Authenticatable implements JWTSubject
     }
 
     // Relationships
-    public function kos()
-    {
-        return $this->hasMany(Kos::class, 'pemilik_id');
-    }
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class, 'user_id');
-    }
-
     public function kosans(): HasMany
     {
         return $this->hasMany(Kosan::class);

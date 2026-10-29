@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Kosan;
 use App\Models\Fasilitas;
 use App\Models\FotoKosan;
+use App\Services\CloudinaryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class KosanController extends Controller
 {
+    public function __construct(
+        protected CloudinaryService $cloudinary
+    ) {}
     public function dashboard()
     {
         $kosanIds = Kosan::where('user_id', Auth::id())->pluck('id');
@@ -76,7 +80,7 @@ class KosanController extends Controller
         if ($request->hasFile('fotos')) {
             $is_utama = true;
             foreach ($request->file('fotos') as $foto) {
-                $path = $foto->store('foto_kosan', 'public');
+                $path = $this->cloudinary->upload($foto, 'foto_kosan');
                 FotoKosan::create([
                     'kosan_id' => $kosan->id,
                     'foto' => $path,
@@ -149,7 +153,7 @@ class KosanController extends Controller
                 ->where('kosan_id', $kosan->id)
                 ->get();
             foreach ($fotosToDelete as $foto) {
-                Storage::disk('public')->delete($foto->foto);
+                $this->cloudinary->delete($foto->foto);
                 $foto->delete();
             }
         }
@@ -164,7 +168,7 @@ class KosanController extends Controller
         if ($request->hasFile('fotos')) {
             $is_utama = $kosan->fotos()->where('is_utama', true)->count() === 0;
             foreach ($request->file('fotos') as $foto) {
-                $path = $foto->store('foto_kosan', 'public');
+                $path = $this->cloudinary->upload($foto, 'foto_kosan');
                 FotoKosan::create([
                     'kosan_id' => $kosan->id,
                     'foto' => $path,
@@ -189,7 +193,7 @@ class KosanController extends Controller
             abort(403);
 
         foreach ($kosan->fotos as $foto) {
-            Storage::disk('public')->delete($foto->foto);
+            $this->cloudinary->delete($foto->foto);
         }
         $kosan->delete();
 

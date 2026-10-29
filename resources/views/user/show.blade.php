@@ -17,7 +17,7 @@
                                  x-transition:enter="transition ease-out duration-200"
                                  x-transition:enter-start="opacity-0"
                                  x-transition:enter-end="opacity-100"
-                                 src="{{ asset('storage/' . $foto->foto) }}"
+                                 src="{{ $foto->url }}"
                                  alt="{{ $kosan->nama_kosan }}"
                                  class="h-72 w-full object-cover md:h-[420px]">
                         @endforeach

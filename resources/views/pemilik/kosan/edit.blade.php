@@ -103,7 +103,7 @@
                             @foreach($kosan->fotos as $foto)
                                 <article class="nb-card-soft overflow-hidden">
                                     <div class="relative h-40">
-                                        <img src="{{ asset('storage/' . $foto->foto) }}" alt="{{ $kosan->nama_kosan }}" class="h-full w-full object-cover">
+                                        <img src="{{ $foto->url }}" alt="{{ $kosan->nama_kosan }}" class="h-full w-full object-cover">
                                         @if($foto->is_utama)
                                             <span class="absolute left-3 top-3 border-2 border-black bg-white px-2 py-1 text-xs font-black">Utama</span>
                                         @endif

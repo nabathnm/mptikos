@@ -189,9 +189,10 @@ class KosanApiController extends Controller
         ]));
 
         if ($request->hasFile('fotos')) {
+            $cloudinary = app(\App\Services\CloudinaryService::class);
             $is_utama = true;
             foreach ($request->file('fotos') as $foto) {
-                $path = $foto->store('foto_kosan', 'public');
+                $path = $cloudinary->upload($foto, 'foto_kosan');
                 \App\Models\FotoKosan::create([
                     'kosan_id' => $kosan->id,
                     'foto' => $path,

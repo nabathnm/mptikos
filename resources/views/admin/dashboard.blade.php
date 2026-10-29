@@ -53,7 +53,7 @@
                         <article class="nb-card-soft overflow-hidden">
                             <div class="h-36 bg-gray-200">
                                 @if($kosan->fotoUtama)
-                                    <img src="{{ asset('storage/' . $kosan->fotoUtama->foto) }}" alt="{{ $kosan->nama_kosan }}" class="h-full w-full object-cover">
+                                    <img src="{{ $kosan->fotoUtama->url }}" alt="{{ $kosan->nama_kosan }}" class="h-full w-full object-cover">
                                 @endif
                             </div>
                             <div class="p-3">

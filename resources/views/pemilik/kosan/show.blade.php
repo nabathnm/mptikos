@@ -14,13 +14,13 @@
                     @php $fotoUtama = $kosan->fotos->firstWhere('is_utama', true) ?? $kosan->fotos->first(); @endphp
                     <div class="grid gap-0 lg:grid-cols-[minmax(0,1fr)_320px]">
                         <div class="bg-gray-200">
-                            <img src="{{ asset('storage/' . $fotoUtama->foto) }}" alt="{{ $kosan->nama_kosan }}" class="h-72 w-full object-cover md:h-[420px]">
+                            <img src="{{ $fotoUtama->url }}" alt="{{ $kosan->nama_kosan }}" class="h-72 w-full object-cover md:h-[420px]">
                         </div>
                         @if($kosan->fotos->count() > 1)
                             <div class="border-t-2 border-black lg:border-t-0 lg:border-l-2">
                                 <div class="grid grid-cols-3 gap-2 p-3 sm:grid-cols-4 lg:grid-cols-2">
                                     @foreach($kosan->fotos as $foto)
-                                        <img src="{{ asset('storage/' . $foto->foto) }}" alt="Foto {{ $loop->iteration }}" class="h-20 w-full border-2 border-black object-cover">
+                                        <img src="{{ $foto->url }}" alt="Foto {{ $loop->iteration }}" class="h-20 w-full border-2 border-black object-cover">
                                     @endforeach
                                 </div>
                             </div>

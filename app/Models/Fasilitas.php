@@ -40,10 +40,4 @@ class Fasilitas extends Model
             'Laundry',
         ];
     }
-
-    // Relationships
-    public function kos()
-    {
-        return $this->belongsToMany(Kos::class, 'kos_fasilitas', 'fasilitas_id', 'kos_id');
-    }
 }
