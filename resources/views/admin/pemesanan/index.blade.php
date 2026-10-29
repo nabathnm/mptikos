@@ -25,7 +25,7 @@
                             <div class="grid gap-4 md:grid-cols-[160px_minmax(0,1fr)_auto] md:items-start">
                                 <div class="h-36 overflow-hidden border-2 border-black bg-gray-200">
                                     @if($pemesanan->kosan && $pemesanan->kosan->fotoUtama)
-                                        <img src="{{ asset('storage/' . $pemesanan->kosan->fotoUtama->foto) }}"
+                                        <img src="{{ $pemesanan->kosan->fotoUtama->url }}"
                                              alt="{{ $pemesanan->kosan->nama_kosan }}"
                                              class="h-full w-full object-cover">
                                     @endif

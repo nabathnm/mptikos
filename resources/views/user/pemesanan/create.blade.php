@@ -26,7 +26,7 @@
                     <div class="mt-5 flex flex-col gap-4 md:flex-row">
                         <div class="h-28 w-full shrink-0 overflow-hidden border-2 border-black bg-gray-200 md:w-36">
                             @if($kosan->fotoUtama)
-                                <img src="{{ asset('storage/' . $kosan->fotoUtama->foto) }}" alt="{{ $kosan->nama_kosan }}" class="h-full w-full object-cover">
+                                <img src="{{ $kosan->fotoUtama->url }}" alt="{{ $kosan->nama_kosan }}" class="h-full w-full object-cover">
                             @endif
                         </div>
                         <div class="min-w-0 flex-1">

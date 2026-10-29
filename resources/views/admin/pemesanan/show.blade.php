@@ -61,7 +61,7 @@
                 <div class="mt-5 grid gap-4 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-stretch">
                     <div class="overflow-hidden border-2 border-black bg-gray-200">
                         @if($pemesanan->kosan->fotoUtama)
-                            <img src="{{ asset('storage/' . $pemesanan->kosan->fotoUtama->foto) }}" alt="{{ $pemesanan->kosan->nama_kosan }}" class="h-full min-h-56 w-full object-cover">
+                            <img src="{{ $pemesanan->kosan->fotoUtama->url }}" alt="{{ $pemesanan->kosan->nama_kosan }}" class="h-full min-h-56 w-full object-cover">
                         @else
                             <div class="flex h-full min-h-56 items-center justify-center px-4 text-center">
                                 <p class="text-2xl font-black">Foto belum tersedia</p>
