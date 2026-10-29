@@ -14,9 +14,15 @@ abstract class Controller
         ]);
 
         if (auth()->check()) {
-            // Generate a JWT token for the currently authenticated web user
-            $token = auth('api')->login(auth()->user());
-            $http = $http->withToken($token);
+            try {
+                // Generate a JWT token for the currently authenticated web user
+                $token = auth('api')->login(auth()->user());
+                if ($token) {
+                    $http = $http->withToken($token);
+                }
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('JWT token generation in Controller failed: ' . $e->getMessage());
+            }
         }
 
         $base = env('INTERNAL_API_URL') ?: url('/');
