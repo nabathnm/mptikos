@@ -108,7 +108,7 @@
                 @endforelse
             </div>
 
-            @if($kosans->hasPages())
+            @if(method_exists($kosans, 'hasPages') && $kosans->hasPages())
                 <div class="mt-8">{{ $kosans->links() }}</div>
             @endif
         </div>

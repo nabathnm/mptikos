@@ -37,17 +37,18 @@ abstract class Controller
 
     protected function paginateApiResponse($responseData, $request)
     {
-        if (!isset($responseData['data']['data'])) {
-            return collect(); // Fallback if not paginated format
-        }
+        $rawItems = $responseData['data']['data'] ?? $responseData['data'] ?? [];
+        $items = is_array($rawItems) ? json_decode(json_encode($rawItems)) : [];
         
-        $items = json_decode(json_encode($responseData['data']['data']));
-        
+        $total = $responseData['data']['total'] ?? count($items);
+        $perPage = $responseData['data']['per_page'] ?? 10;
+        $currentPage = $responseData['data']['current_page'] ?? 1;
+
         return new \Illuminate\Pagination\LengthAwarePaginator(
             $items,
-            $responseData['data']['total'] ?? 0,
-            $responseData['data']['per_page'] ?? 10,
-            $responseData['data']['current_page'] ?? 1,
+            $total,
+            $perPage,
+            $currentPage,
             ['path' => url($request->path()), 'query' => $request->query()]
         );
     }
