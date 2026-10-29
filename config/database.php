@@ -61,8 +61,8 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? (
                 env('MYSQL_ATTR_SSL_CA') !== null ? [
-                    \PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA', ''),
-                    \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', false),
+                    (defined('Pdo\Mysql::ATTR_SSL_CA') ? Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA', ''),
+                    (defined('Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT') ? Mysql::ATTR_SSL_VERIFY_SERVER_CERT : \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT) => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', false),
                 ] : []
             ) : [],
         ],
@@ -84,8 +84,8 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? (
                 env('MYSQL_ATTR_SSL_CA') !== null ? [
-                    \PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA', ''),
-                    \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', false),
+                    (defined('Pdo\Mysql::ATTR_SSL_CA') ? Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA', ''),
+                    (defined('Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT') ? Mysql::ATTR_SSL_VERIFY_SERVER_CERT : \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT) => env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', false),
                 ] : []
             ) : [],
         ],
