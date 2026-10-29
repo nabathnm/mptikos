@@ -38,27 +38,6 @@
                             <p class="nb-kicker mb-2">Harga Maksimal (/bulan)</p>
                             <input type="number" name="harga_max" value="{{ request('harga_max') }}" placeholder="Contoh: 1500000" class="nb-input">
                         </div>
-
-                        <!-- Fasilitas (Full Row) -->
-                        <div class="md:col-span-2">
-                            <p class="nb-kicker mb-4 border-b-2 border-black pb-1 inline-block">Fasilitas</p>
-                            <div class="grid grid-cols-2 gap-y-4 gap-x-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-                                @foreach($fasilitasList as $f)
-                                    <label class="flex items-start gap-2 cursor-pointer group">
-                                        <div class="relative flex-shrink-0 mt-1">
-                                            <input type="checkbox" name="fasilitas[]" value="{{ $f->nama_fasilitas }}" 
-                                                   {{ is_array(request('fasilitas')) && in_array($f->nama_fasilitas, request('fasilitas')) ? 'checked' : '' }}
-                                                   class="w-5 h-5 border-2 border-black rounded-none checked:bg-pink-500 appearance-none bg-white">
-                                            <svg class="absolute w-3 h-3 text-white pointer-events-none hidden group-has-[:checked]:block left-1 top-1" 
-                                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="20 6 9 17 4 12"></polyline>
-                                            </svg>
-                                        </div>
-                                        <span class="text-base font-bold leading-tight group-hover:underline">{{ $f->nama_fasilitas }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
-                        </div>
                     </div>
 
                     <div class="mt-5 flex justify-end">

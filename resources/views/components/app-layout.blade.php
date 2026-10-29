@@ -15,7 +15,7 @@
         <div class="nb-shell py-3">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex items-center justify-between gap-3">
-                    <a href="{{ url('/') }}" class="inline-flex items-center gap-2 text-2xl font-black tracking-tight md:text-3xl">
+                    <a href="{{ route('home') }}" class="inline-flex items-center gap-2 text-2xl font-black tracking-tight md:text-3xl">
                         <span aria-hidden="true">▦</span> EasyKos
                     </a>
                     <button type="button"
@@ -136,7 +136,7 @@
         <div class="nb-shell">
             <div class="flex flex-col items-center justify-between gap-5 md:flex-row">
                 <div>
-                    <a href="{{ url('/') }}" class="text-3xl font-black tracking-tight">
+                    <a href="{{ route('home') }}" class="text-3xl font-black tracking-tight">
                         ▦ EasyKos
                     </a>
                     <p class="mt-2 text-lg font-medium text-gray-600">

@@ -11,7 +11,7 @@
         <h1 class="text-9xl font-black mb-4">404</h1>
         <p class="text-3xl font-black mb-6">Waduh! Kesasar ya?</p>
         <p class="text-xl font-medium mb-8 text-gray-600">Halaman yang kamu cari nggak ada di sini.</p>
-        <a href="{{ url('/') }}" class="nb-btn nb-btn-primary px-8 py-3 text-xl inline-block">
+        <a href="{{ route('home') }}" class="nb-btn nb-btn-primary px-8 py-3 text-xl inline-block">
             Balik ke Beranda
         </a>
     </div>

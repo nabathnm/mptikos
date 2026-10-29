@@ -11,7 +11,7 @@
         <h1 class="text-9xl font-black mb-4 text-[#EF4444]">403</h1>
         <p class="text-3xl font-black mb-6">Eits! Nggak Boleh Masuk.</p>
         <p class="text-xl font-medium mb-8 text-gray-600">Kamu nggak punya izin buat ngintip halaman ini, Bos.</p>
-        <a href="{{ url('/') }}" class="nb-btn nb-btn-primary px-8 py-3 text-xl inline-block">
+        <a href="{{ route('home') }}" class="nb-btn nb-btn-primary px-8 py-3 text-xl inline-block">
             Balik ke Beranda
         </a>
     </div>
