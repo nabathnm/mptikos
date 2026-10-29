@@ -17,18 +17,10 @@ register_shutdown_function(function () {
     }
 });
 
-// 1. Debug server variables
-if (isset($_SERVER['REQUEST_URI']) && str_contains($_SERVER['REQUEST_URI'], '__debug_server')) {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'REQUEST_URI' => $_SERVER['REQUEST_URI'] ?? null,
-        'PATH_INFO' => $_SERVER['PATH_INFO'] ?? null,
-        'PHP_SELF' => $_SERVER['PHP_SELF'] ?? null,
-        'SCRIPT_NAME' => $_SERVER['SCRIPT_NAME'] ?? null,
-        'HEADERS' => getallheaders(),
-    ], JSON_PRETTY_PRINT);
-    exit;
-}
+// Fix base path: Vercel serverless executes from api/index.php, which causes Symfony/Laravel
+// to infer baseUrl as '/api'. Setting SCRIPT_NAME to '/index.php' ensures root is '/'
+// so that normal web routes and '/api/*' routes are routed properly.
+$_SERVER['SCRIPT_NAME'] = '/index.php';
 
 // 1. Prepare writable storage & cache directories inside /tmp
 $storagePath = '/tmp/storage';
