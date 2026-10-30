@@ -35,32 +35,7 @@
                     </a>
 
                     @auth
-                        @if(Auth::user()->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}"
-                               class="nb-nav-link {{ request()->routeIs('admin.dashboard') ? 'is-active' : '' }}">
-                                Admin
-                            </a>
-                            <a href="{{ route('admin.users.index') }}"
-                               class="nb-nav-link {{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}">
-                                Users
-                            </a>
-                            <a href="{{ route('admin.kosan.index') }}"
-                               class="nb-nav-link {{ request()->routeIs('admin.kosan.*') ? 'is-active' : '' }}">
-                                Kosan
-                            </a>
-                            <a href="{{ route('admin.pemesanan.index') }}"
-                               class="nb-nav-link {{ request()->routeIs('admin.pemesanan.*') ? 'is-active' : '' }}">
-                                Pemesanan
-                            </a>
-                            <a href="{{ route('admin.ulasan.index') }}"
-                               class="nb-nav-link {{ request()->routeIs('admin.ulasan.*') ? 'is-active' : '' }}">
-                                Ulasan
-                            </a>
-                            <a href="{{ route('admin.fasilitas.index') }}"
-                               class="nb-nav-link {{ request()->routeIs('admin.fasilitas.*') ? 'is-active' : '' }}">
-                                Fasilitas
-                            </a>
-                        @elseif(Auth::user()->role === 'pemilik')
+                        @if(Auth::user()->role === 'pemilik')
                             <a href="{{ route('pemilik.dashboard') }}"
                                class="nb-nav-link {{ request()->routeIs('pemilik.dashboard') ? 'is-active' : '' }}">
                                 Dashboard

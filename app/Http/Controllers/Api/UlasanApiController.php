@@ -206,7 +206,7 @@ class UlasanApiController extends Controller
 
         $user = Auth::user();
 
-        if ($ulasan->user_id !== $user->id && $user->role !== 'admin') {
+        if ($ulasan->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk mengubah ulasan ini',
@@ -237,7 +237,7 @@ class UlasanApiController extends Controller
 
     #[OA\Delete(
         path: "/api/ulasan/{id}",
-        summary: "Hapus ulasan milik sendiri atau admin",
+        summary: "Hapus ulasan milik sendiri",
         tags: ["Ulasan"],
         security: [["bearerAuth" => []]],
         parameters: [
@@ -262,7 +262,7 @@ class UlasanApiController extends Controller
 
         $user = Auth::user();
 
-        if ($ulasan->user_id !== $user->id && $user->role !== 'admin') {
+        if ($ulasan->user_id !== $user->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda tidak memiliki akses untuk menghapus ulasan ini',

@@ -2,12 +2,6 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\KosanController as AdminKosanController;
-use App\Http\Controllers\Admin\PemesananController as AdminPemesananController;
-use App\Http\Controllers\Admin\UlasanController as AdminUlasanController;
-use App\Http\Controllers\Admin\FasilitasController as AdminFasilitasController;
 use App\Http\Controllers\Pemilik\KosanController as PemilikKosanController;
 use App\Http\Controllers\Pemilik\PemesananController as PemilikPemesananController;
 use App\Http\Controllers\User\KosanController as UserKosanController;
@@ -23,11 +17,8 @@ Route::get('/home', [UserKosanController::class, 'index'])->name('home');
 Route::get('/kosan', [UserKosanController::class, 'search'])->name('kosan.search');
 Route::get('/kosan/{kosan}', [UserKosanController::class, 'show'])->name('kosan.show');
 
-// Dashboard umum (tidak dipakai lagi, redirect sesuai role)
+// Dashboard umum (redirect sesuai role: pemilik atau user)
 Route::get('/dashboard', function () {
-    if (Auth::user()->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    }
     if (Auth::user()->role === 'pemilik') {
         return redirect()->route('pemilik.dashboard');
     }
@@ -38,20 +29,6 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
-
-// Admin
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('users', AdminUserController::class)->except(['show']);
-    Route::resource('kosan', AdminKosanController::class);
-    Route::resource('pemesanan', AdminPemesananController::class)->only(['index', 'show']);
-    Route::patch('pemesanan/{pemesanan}/setujui', [AdminPemesananController::class, 'setujui'])->name('pemesanan.setujui');
-    Route::patch('pemesanan/{pemesanan}/tolak', [AdminPemesananController::class, 'tolak'])->name('pemesanan.tolak');
-    Route::resource('ulasan', AdminUlasanController::class)->only(['index', 'destroy']);
-    Route::resource('fasilitas', AdminFasilitasController::class)
-        ->parameters(['fasilitas' => 'fasilitas'])
-        ->except(['show']);
 });
 
 // Pemilik Kosan (development: set DEV_SKIP_PEMILIK_AUTH=true di .env)

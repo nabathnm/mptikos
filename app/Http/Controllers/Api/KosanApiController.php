@@ -152,10 +152,10 @@ class KosanApiController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if ($user->role !== 'pemilik' && $user->role !== 'admin') {
+        if ($user->role !== 'pemilik') {
             return response()->json([
                 'success' => false,
-                'message' => 'Hanya pemilik atau admin yang dapat menambah kosan',
+                'message' => 'Hanya pemilik yang dapat menambah kosan',
             ], 403);
         }
 
@@ -181,10 +181,8 @@ class KosanApiController extends Controller
             ], 422);
         }
 
-        $userId = $user->role === 'admin' ? $request->get('user_id', $user->id) : $user->id;
-
         $kosan = Kosan::create(array_merge($validator->validated(), [
-            'user_id' => $userId,
+            'user_id' => $user->id,
             'status'  => $request->get('status', 'aktif'),
         ]));
 

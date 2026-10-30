@@ -4,7 +4,7 @@
         "title": "EasyKos API Documentation",
         "description": "Dokumentasi API untuk aplikasi EasyKos - Manajemen Kos-kosan",
         "contact": {
-            "email": "admin@easykos.com"
+            "email": "support@easykos.com"
         },
         "version": "1.0.0"
     },
@@ -191,7 +191,7 @@
                 "tags": [
                     "Fasilitas"
                 ],
-                "summary": "Tambah fasilitas baru (hanya admin)",
+                "summary": "Tambah fasilitas baru (hanya pemilik)",
                 "operationId": "bc996904e7b316b57c6f7adffb7aca31",
                 "requestBody": {
                     "required": true,
@@ -261,7 +261,7 @@
                 "tags": [
                     "Fasilitas"
                 ],
-                "summary": "Hapus fasilitas (hanya admin)",
+                "summary": "Hapus fasilitas (hanya pemilik)",
                 "operationId": "55ac60e8b0de24f0ea2c8c18ba19d53d",
                 "parameters": [
                     {
@@ -295,7 +295,7 @@
                 "tags": [
                     "Fasilitas"
                 ],
-                "summary": "Update fasilitas (hanya admin)",
+                "summary": "Update fasilitas (hanya pemilik)",
                 "operationId": "c6d7c9858698010f1bf3e6bee14bfb7d",
                 "parameters": [
                     {
@@ -997,7 +997,7 @@
                 "tags": [
                     "Ulasan"
                 ],
-                "summary": "Hapus ulasan milik sendiri atau admin",
+                "summary": "Hapus ulasan milik sendiri",
                 "operationId": "9b3ee29a919329c9b2a0d9ae0c73326f",
                 "parameters": [
                     {
@@ -1081,282 +1081,6 @@
                     }
                 ]
             }
-        },
-        "/api/users": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Daftar semua user (hanya admin)",
-                "operationId": "1a225a5d5bf88729b3d0acc4d3de0538",
-                "parameters": [
-                    {
-                        "name": "q",
-                        "in": "query",
-                        "description": "Pencarian nama/email",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "role",
-                        "in": "query",
-                        "description": "Filter berdasarkan role",
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "admin",
-                                "pemilik",
-                                "user"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "Jumlah data per halaman",
-                        "schema": {
-                            "type": "integer",
-                            "default": 10
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Berhasil mengambil daftar user"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "post": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Tambah user baru (hanya admin)",
-                "operationId": "9ddc486c6cd3f5d83d62231716bf6c91",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "nama",
-                                    "email",
-                                    "password",
-                                    "password_confirmation",
-                                    "role"
-                                ],
-                                "properties": {
-                                    "nama": {
-                                        "type": "string",
-                                        "example": "Admin Baru"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email",
-                                        "example": "admin2@example.com"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "password123"
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "format": "password",
-                                        "example": "password123"
-                                    },
-                                    "role": {
-                                        "type": "string",
-                                        "example": "user",
-                                        "enum": [
-                                            "admin",
-                                            "pemilik",
-                                            "user"
-                                        ]
-                                    },
-                                    "no_telepon": {
-                                        "type": "string",
-                                        "example": "08123456789"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "User berhasil ditambahkan"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "409": {
-                        "description": "Admin sudah ada"
-                    },
-                    "422": {
-                        "description": "Validation error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/users/{id}": {
-            "get": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Detail satu user (hanya admin)",
-                "operationId": "d8c9be92ec1e4da4c1fb2b14d05d17cd",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID User",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Berhasil mengambil detail user"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "User tidak ditemukan"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Hapus user (hanya admin)",
-                "operationId": "eed9832f984af793b898f4c6f2994247",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID User",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User berhasil dihapus"
-                    },
-                    "400": {
-                        "description": "Tidak dapat menghapus diri sendiri"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "User tidak ditemukan"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            },
-            "patch": {
-                "tags": [
-                    "Users"
-                ],
-                "summary": "Update user (hanya admin)",
-                "operationId": "2002ea44f4c7a91cba138ef46924aa09",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID User",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "nama": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "format": "email"
-                                    },
-                                    "password": {
-                                        "type": "string",
-                                        "format": "password"
-                                    },
-                                    "password_confirmation": {
-                                        "type": "string",
-                                        "format": "password"
-                                    },
-                                    "role": {
-                                        "type": "string",
-                                        "enum": [
-                                            "admin",
-                                            "pemilik",
-                                            "user"
-                                        ]
-                                    },
-                                    "no_telepon": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "User berhasil diperbarui"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "404": {
-                        "description": "User tidak ditemukan"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
         }
     },
     "components": {
@@ -1391,10 +1115,6 @@
         {
             "name": "Ulasan",
             "description": "Ulasan"
-        },
-        {
-            "name": "Users",
-            "description": "Users"
         }
     ]
 }

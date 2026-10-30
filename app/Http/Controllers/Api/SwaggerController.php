@@ -9,7 +9,7 @@ use OpenApi\Attributes as OA;
     title: "EasyKos API Documentation",
     version: "1.0.0",
     description: "Dokumentasi API untuk aplikasi EasyKos - Manajemen Kos-kosan",
-    contact: new OA\Contact(email: "admin@easykos.com")
+    contact: new OA\Contact(email: "support@easykos.com")
 )]
 #[OA\Server(
     url: "http://localhost:8000",

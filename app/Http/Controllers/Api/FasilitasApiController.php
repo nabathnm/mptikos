@@ -67,7 +67,7 @@ class FasilitasApiController extends Controller
 
     #[OA\Post(
         path: "/api/fasilitas",
-        summary: "Tambah fasilitas baru (hanya admin)",
+        summary: "Tambah fasilitas baru (hanya pemilik)",
         tags: ["Fasilitas"],
         security: [["bearerAuth" => []]],
         requestBody: new OA\RequestBody(
@@ -87,10 +87,10 @@ class FasilitasApiController extends Controller
     )]
     public function store(Request $request)
     {
-        if (! Auth::user() || Auth::user()->role !== 'admin') {
+        if (! Auth::user() || Auth::user()->role !== 'pemilik') {
             return response()->json([
                 'success' => false,
-                'message' => 'Hanya admin yang dapat menambah fasilitas',
+                'message' => 'Hanya pemilik yang dapat menambah fasilitas',
             ], 403);
         }
 
@@ -117,7 +117,7 @@ class FasilitasApiController extends Controller
 
     #[OA\Patch(
         path: "/api/fasilitas/{id}",
-        summary: "Update fasilitas (hanya admin)",
+        summary: "Update fasilitas (hanya pemilik)",
         tags: ["Fasilitas"],
         security: [["bearerAuth" => []]],
         parameters: [
@@ -140,10 +140,10 @@ class FasilitasApiController extends Controller
     )]
     public function update(Request $request, $id)
     {
-        if (! Auth::user() || Auth::user()->role !== 'admin') {
+        if (! Auth::user() || Auth::user()->role !== 'pemilik') {
             return response()->json([
                 'success' => false,
-                'message' => 'Hanya admin yang dapat mengubah fasilitas',
+                'message' => 'Hanya pemilik yang dapat mengubah fasilitas',
             ], 403);
         }
 
@@ -184,7 +184,7 @@ class FasilitasApiController extends Controller
 
     #[OA\Delete(
         path: "/api/fasilitas/{id}",
-        summary: "Hapus fasilitas (hanya admin)",
+        summary: "Hapus fasilitas (hanya pemilik)",
         tags: ["Fasilitas"],
         security: [["bearerAuth" => []]],
         parameters: [
@@ -198,10 +198,10 @@ class FasilitasApiController extends Controller
     )]
     public function destroy($id)
     {
-        if (! Auth::user() || Auth::user()->role !== 'admin') {
+        if (! Auth::user() || Auth::user()->role !== 'pemilik') {
             return response()->json([
                 'success' => false,
-                'message' => 'Hanya admin yang dapat menghapus fasilitas',
+                'message' => 'Hanya pemilik yang dapat menghapus fasilitas',
             ], 403);
         }
 
