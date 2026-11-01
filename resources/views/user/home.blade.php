@@ -17,7 +17,6 @@
             }">
                 <div class="flex flex-col gap-3 md:flex-row">
                     <div class="relative flex-1">
-                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-lg select-none" aria-hidden="true">🔍</span>
                         <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama kosan, kota, atau alamat..."
                                id="q" class="nb-input pl-11" />
                     </div>
@@ -25,7 +24,6 @@
                         <button type="button" @click="showFilters = !showFilters" 
                                 :class="showFilters ? 'bg-yellow-300' : ''"
                                 class="nb-btn nb-btn-secondary whitespace-nowrap flex items-center gap-2">
-                            <span>⚙️</span>
                             <span x-text="showFilters ? 'Tutup Filter' : 'Filter'"></span>
                             @if($activeFilterCount > 0)
                                 <span class="bg-black text-white text-xs font-black px-2 py-0.5 border border-black leading-none">
@@ -54,7 +52,6 @@
                         <div>
                             <label class="nb-kicker font-black mb-1.5 block">Harga Maksimal (/bulan)</label>
                             <div class="relative">
-                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-black text-gray-500 select-none">Rp</span>
                                 <input type="number" name="harga_max" value="{{ request('harga_max') }}" placeholder="Contoh: 1500000" class="nb-input pl-11">
                             </div>
                         </div>
