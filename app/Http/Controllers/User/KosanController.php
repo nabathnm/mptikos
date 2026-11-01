@@ -44,7 +44,7 @@ class KosanController extends Controller
 
         $kosans = $query->latest()->paginate(12);
 
-        $fasilitasList = Fasilitas::orderBy('nama_fasilitas')->get();
+        $fasilitasList = $this->getFasilitasList();
 
         return view('user.home', compact('kosans', 'fasilitasList'));
     }
@@ -85,11 +85,29 @@ class KosanController extends Controller
             }
         }
 
-        $kosans = $query->latest()->paginate(12);
+        $kosans = $query->latest()->paginate(12)->withQueryString();
 
-        $fasilitasList = Fasilitas::orderBy('nama_fasilitas')->get();
+        $fasilitasList = $this->getFasilitasList();
 
         return view('user.home', compact('kosans', 'fasilitasList'));
+    }
+
+    private function getFasilitasList(): array
+    {
+        $allKosanFasilitas = Kosan::whereNotNull('fasilitas')
+            ->pluck('fasilitas')
+            ->flatten()
+            ->filter()
+            ->toArray();
+
+        $fasilitasList = array_values(array_unique(array_merge(
+            Fasilitas::listForForm(),
+            $allKosanFasilitas
+        )));
+
+        sort($fasilitasList);
+
+        return $fasilitasList;
     }
 
     public function ulasan(Request $request, $id)
